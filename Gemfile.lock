@@ -20,6 +20,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
     public_suffix (3.0.3)
+    rake (12.3.1)
+    sequel (5.14.0)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.5)
@@ -30,6 +32,8 @@ PLATFORMS
 DEPENDENCIES
   http
   pry
+  rake
+  sequel
 
 BUNDLED WITH
    1.16.6

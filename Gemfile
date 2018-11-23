@@ -4,5 +4,7 @@ source "https://rubygems.org"
 
 git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
 
-gem 'pry'
-gem 'http'
+gem 'rake' # build utility
+gem 'pry' # console
+gem 'http' # http client
+gem 'sequel' # database toolkit
