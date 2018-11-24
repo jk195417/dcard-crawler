@@ -1,4 +1,4 @@
-require_relative 'setup'
+require_relative 'initializer'
 
 module App
   def self.run(console: false)
