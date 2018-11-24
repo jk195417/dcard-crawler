@@ -41,5 +41,5 @@
     $ rake run
 
     # 執行命令列模式
-    $ rake console
+    $ rake run:c
     ```

@@ -6,8 +6,10 @@ task :run do
   App.run
 end
 
-desc '命令列模式'
-task :console do
-  puts '進入命令列模式'
-  App.run(console: true)
+namespace :run do
+  desc '命令列模式'
+  task :c do
+    puts '進入命令列模式'
+    App.run(console: true)
+  end
 end
