@@ -13,3 +13,13 @@ namespace :run do
     App.run(console: true)
   end
 end
+
+namespace :g do
+  desc "生成 migration 檔案"
+  task :migration, [:filename] do |task, args|
+    binding.pry
+    filename = args.filename
+    timestamp = Time.now.strftime("%Y%m%d%H%M%S%L")
+    file = File.new("db/migrations/#{timestamp}_#{filename}.rb", 'a')
+  end
+end
