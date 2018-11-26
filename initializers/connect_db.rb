@@ -1,2 +1,5 @@
-# $db = Sequel.connect('postgres://user:password@host:port/database_name')
-$db = Sequel.connect('sqlite://db/dcard.db')
+$db = Sequel.connect(ENV['DATABASE_URL'])
+
+# check db migrated or raise error
+Sequel.extension :migration
+Sequel::Migrator.check_current($db, 'db/migrations')
