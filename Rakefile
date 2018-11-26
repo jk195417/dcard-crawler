@@ -15,11 +15,21 @@ namespace :run do
 end
 
 namespace :g do
-  desc "生成 migration 檔案"
-  task :migration, [:filename] do |task, args|
-    binding.pry
-    filename = args.filename
-    timestamp = Time.now.strftime("%Y%m%d%H%M%S%L")
-    file = File.new("db/migrations/#{timestamp}_#{filename}.rb", 'a')
+  desc '生成 migration 檔案'
+  task :migration, :title do |_task, args|
+    args.with_defaults(title: 'no_name')
+    version = 0
+    version = DB[:schema_info].first[:version] if DB.tables.include?(:schema_info)
+    new_version = version + 1
+    folder = 'db/migrations'
+    filename = "#{format('%03d', new_version)}_#{args.title}.rb"
+    File.open("#{folder}/#{filename}", 'w') do |f|
+      f << "Sequel.migration do\n"
+      f << "\tchange do\n"
+      f << "\t\t# migration code here...\n"
+      f << "\tend\n"
+      f << 'end'
+    end
+    puts "migration file #{filename} created at #{folder}"
   end
 end
