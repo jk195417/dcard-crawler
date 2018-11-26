@@ -12,10 +12,16 @@ task :run, :console do |_task, args|
 end
 
 namespace :run do
-  desc '命令列模式'
-  task :c do
-    puts '進入命令列模式'
-    App.run(console: true)
+  desc '獲取並更新所有的 Forums，帶入參數 c 進入命令列模式'
+  task :update_forums, :console do |_task, args|
+    require_relative 'app'
+    puts '獲取並更新所有的 Forums'
+    if args.console == 'c'
+      puts '進入命令列模式'
+      App.update_forums(console: true)
+    else
+      App.update_forums
+    end
   end
 end
 
