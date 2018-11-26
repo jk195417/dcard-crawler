@@ -1,3 +1,6 @@
+# require environment variables at /config/env.rb
+require_relative 'config/env'
+
 # require all gems in Gemfile
 require 'rubygems'
 require 'bundler/setup'
