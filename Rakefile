@@ -33,3 +33,44 @@ namespace :g do
     puts "migration file #{filename} created at #{folder}"
   end
 end
+
+namespace :db do
+  require_relative 'config/env'
+  require 'sequel'
+  Sequel.extension :migration
+  DB = Sequel.connect(ENV['DATABASE_URL'])
+
+  desc 'Prints current schema version'
+  task :version do
+    version = 0
+    version = DB[:schema_info].first[:version] if DB.tables.include?(:schema_info)
+    puts "Schema Version: #{version}"
+  end
+
+  desc 'Dump Database Schema To db/schema.rb'
+  task :dump_schema do
+    puts('Dump Database Schema To db/schema.rb')
+    system("sequel -d #{ENV['DATABASE_URL']} > db/schema.rb")
+  end
+
+  desc 'Perform migration up to latest migration available'
+  task :migrate do
+    Sequel::Migrator.run(DB, 'db/migrations')
+    Rake::Task['db:version'].execute
+    Rake::Task['db:dump_schema'].execute
+  end
+
+  desc 'Perform rollback to specified target or rollback last version as default'
+  task :rollback, :target do |_task, args|
+    args.with_defaults(target: 0)
+    version = (DB.tables.include?(:schema_info) ? DB[:schema_info].first[:version] : 0)
+    if version.to_i == 0
+      puts('no migration can be rollback')
+    else
+      target = version - 1 if args[:target].to_i == 0
+      Sequel::Migrator.run(DB, 'db/migrations', target: target)
+      Rake::Task['db:version'].execute
+      Rake::Task['db:dump_schema'].execute
+    end
+  end
+end
