@@ -1,9 +1,14 @@
-require_relative 'app'
-
-desc '執行主程式'
-task :run do
+desc '執行主程式，帶入參數 c 進入命令列模式'
+task :run, :console do |_task, args|
+  args.with_defaults(console: '')
+  require_relative 'app'
   puts '開始執行主程式'
-  App.run
+  if args.console == 'c'
+    puts '進入命令列模式'
+    App.run(console: true)
+  else
+    App.run
+  end
 end
 
 namespace :run do
