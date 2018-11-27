@@ -28,5 +28,38 @@ Sequel.migration do
     create_table(:schema_info) do
       Integer :version, :default=>0, :null=>false
     end
+    
+    create_table(:posts, :ignore_index_errors=>true) do
+      primary_key :id
+      Integer :dcard_id
+      Integer :reply_id
+      Integer :comment_count
+      Integer :like_count
+      String :title, :size=>255
+      String :excerpt, :text=>true
+      String :tags, :size=>255
+      String :topics, :size=>255
+      String :forum_name, :size=>255
+      String :forum_alias, :size=>255
+      String :gender, :size=>255
+      String :school, :size=>255
+      String :department, :size=>255
+      String :reply_title, :size=>255
+      String :reactions, :text=>true
+      String :custom_style, :text=>true
+      String :media, :text=>true
+      TrueClass :anonymous_school
+      TrueClass :anonymous_department
+      TrueClass :pinned
+      TrueClass :with_nickname
+      TrueClass :hidden
+      TrueClass :with_images
+      TrueClass :with_videos
+      DateTime :created_at
+      DateTime :updated_at
+      foreign_key :forum_id, :forums
+      
+      index [:dcard_id], :name=>:sqlite_autoindex_posts_1, :unique=>true
+    end
   end
 end

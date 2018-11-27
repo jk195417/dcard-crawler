@@ -1,4 +1,6 @@
 class Forum < Sequel::Model
+  one_to_many :posts
+  
   def self.load_from_dcard(data)
     { dcard_id: data['id'],
       alias: data['alias'],
