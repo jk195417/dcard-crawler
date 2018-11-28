@@ -18,12 +18,12 @@ module App
     binding.pry if console
   end
 
-  def self.get_forums_posts(console: false)
+  def self.get_forums_posts(console: false, recent: false)
     workers = Workers.new(thread_number: 4)
     forums = Forum.all
     new_posts = []
     forums.each do |forum|
-      oldest_post = Post.oldest(forum_id: forum.id)
+      oldest_post = (recent ? nil : Post.oldest(forum_id: forum.id))
       posts = JSON.parse(HTTP.get(DcardAPI.forum_posts(forum.alias, before: oldest_post&.dcard_id)).to_s)
       posts.each do |post|
         workers.add_task do
