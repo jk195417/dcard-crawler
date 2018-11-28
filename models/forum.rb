@@ -1,8 +1,9 @@
 class Forum < Sequel::Model
   one_to_many :posts
-  
+
   def self.load_from_dcard(data)
-    { dcard_id: data['id'],
+    {
+      dcard_id: data['id'],
       alias: data['alias'],
       name: data['name'],
       description: data['description'],
@@ -18,9 +19,26 @@ class Forum < Sequel::Model
       should_categorized: data['shouldCategorized'],
       nsfw: data['nsfw'],
       created_at: DateTime.parse(data['createdAt']),
-      updated_at: DateTime.parse(data['updatedAt']) }
+      updated_at: DateTime.parse(data['updatedAt'])
+    }
   end
+
   def load_from_dcard(data)
     self.class.new(self.class.load_from_dcard(data))
+  end
+
+  def new_posts_from_dcard(recent: false)
+    oldest_post = (recent ? nil : Post.oldest(forum_id: self.id))
+    posts = JSON.parse(HTTP.get(DcardAPI.forum_posts(self.alias, before: oldest_post&.dcard_id)).to_s)
+    new_posts = []
+    posts.each do |post|
+      next if Post.find(dcard_id: post['id'])
+      new_post = Post.load_from_dcard(post)
+      new_post[:forum_id] = self.id
+      new_posts << new_post
+    end
+    new_posts
+  rescue => e
+    puts "\nError when processing Forum id=#{self.id} name=#{self.alias}\n#{e.inspect}\n"
   end
 end
