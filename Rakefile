@@ -2,14 +2,14 @@ require_relative 'app'
 Sequel.extension :migration
 
 namespace :g do
-  desc '生成 migration 檔案'
-  task :migration, :title do |_task, args|
-    args.with_defaults(title: 'no_name')
+  desc '生成 migration'
+  task :migration do
+    title = ARGV[1] || 'no_name'
     version = 0
     version = $db[:schema_info].first[:version] if $db.tables.include?(:schema_info)
     new_version = version + 1
     folder = 'db/migrations'
-    filename = "#{format('%03d', new_version)}_#{args.title}.rb"
+    filename = "#{format('%03d', new_version)}_#{title}.rb"
     File.open("#{folder}/#{filename}", 'w') do |f|
       f << "Sequel.migration do\n"
       f << "\tchange do\n"
@@ -18,6 +18,7 @@ namespace :g do
       f << 'end'
     end
     puts "migration file #{filename} created at #{folder}"
+    abort # needed stop other tasks
   end
 end
 
@@ -43,22 +44,24 @@ namespace :db do
   end
 
   desc 'Perform rollback to specified target or rollback last version as default'
-  task :rollback, :target do |_task, args|
-    args.with_defaults(target: 0)
+  task :rollback do
     version = ($db.tables.include?(:schema_info) ? $db[:schema_info].first[:version] : 0)
+    target = ARGV[1] || version - 1
     if version.to_i == 0
       puts('no migration can be rollback')
     else
-      target = version - 1 if args[:target].to_i == 0
-      Sequel::Migrator.run($db, 'db/migrations', target: target)
+      Sequel::Migrator.run($db, 'db/migrations', target: target.to_i)
       Rake::Task['db:version'].execute
       Rake::Task['db:dump_schema'].execute
     end
+    abort # needed stop other tasks
+  end
+
+  desc 'check db migrated or raise error'
+  task :check_migrated do
+    Sequel::Migrator.check_current($db, 'db/migrations')
   end
 end
-
-# check db migrated or raise error
-Sequel::Migrator.check_current($db, 'db/migrations')
 
 desc '進入互動模式'
 task :run do
@@ -100,3 +103,8 @@ namespace :run do
     end
   end
 end
+
+task :run => 'db:check_migrated'
+task 'run:update_forums' => 'db:check_migrated'
+task 'run:get_posts' => 'db:check_migrated'
+task 'run:get_forums_posts' => 'db:check_migrated'
