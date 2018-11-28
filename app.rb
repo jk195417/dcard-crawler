@@ -1,7 +1,9 @@
 require_relative 'initializer'
 
 module App
-  def self.run(console: false)
+  def self.run()
+    binding.pry
+  end
     response = HTTP.get(DcardAPI.forums)
     forums = JSON.parse(response.to_s)
     posts = []
