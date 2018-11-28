@@ -30,6 +30,12 @@ class Post < Sequel::Model
       updated_at: DateTime.parse(data['updatedAt']) }
   end
 
+  def self.oldest(forum_id: nil)
+    result = Post
+    result = result.where(forum_id: forum_id) if forum_id
+    result.order(Sequel.asc(:dcard_id)).first
+  end
+
   def load_from_dcard(data)
     self.class.new(self.class.load_from_dcard(data))
   end
