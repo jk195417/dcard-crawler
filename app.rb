@@ -29,7 +29,7 @@ module App
     end
     workers.work
     $db[:posts].multi_insert(new_posts)
-    puts "Get #{new_posts.size} new posts and inserted into database"
+    $logger.info { "Get #{new_posts.size} new posts and inserted into database" }
     binding.pry if console
   end
 
@@ -48,7 +48,7 @@ module App
           new_posts << new_post
         end
       rescue => e
-        puts e.inspect
+        $logger.error { e.inspect }
       end
     end
     workers.work

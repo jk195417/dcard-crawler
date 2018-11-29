@@ -17,7 +17,7 @@ namespace :g do
       f << "\tend\n"
       f << 'end'
     end
-    puts "migration file #{filename} created at #{folder}"
+    $logger.debug { "migration file #{filename} created at #{folder}" }
     abort # needed stop other tasks
   end
 end
@@ -27,12 +27,12 @@ namespace :db do
   task :version do
     version = 0
     version = $db[:schema_info].first[:version] if $db.tables.include?(:schema_info)
-    puts "Schema Version: #{version}"
+    $logger.debug { "Schema Version: #{version}" }
   end
 
   desc 'Dump Database Schema To db/schema.rb'
   task :dump_schema do
-    puts('Dump Database Schema To db/schema.rb')
+    $logger.debug { 'Dump Database Schema To db/schema.rb' }
     system("sequel -d #{ENV['DATABASE_URL']} > db/schema.rb")
   end
 
@@ -48,7 +48,7 @@ namespace :db do
     version = ($db.tables.include?(:schema_info) ? $db[:schema_info].first[:version] : 0)
     target = ARGV[1] || version - 1
     if version.to_i == 0
-      puts('no migration can be rollback')
+      $logger.debug { 'no migration can be rollback' }
     else
       Sequel::Migrator.run($db, 'db/migrations', target: target.to_i)
       Rake::Task['db:version'].execute
@@ -65,7 +65,6 @@ end
 
 desc '進入互動模式'
 task :run do
-  puts '進入互動模式'
   App.run
 end
 

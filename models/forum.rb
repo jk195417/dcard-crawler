@@ -39,6 +39,6 @@ class Forum < Sequel::Model
     end
     new_posts
   rescue => e
-    puts "\nError when getting post from Forum name=#{self.alias}\n#{e.inspect}\n"
+    $logger.error { "Error when getting post from Forum name=#{self.alias}\n#{e.inspect}" }
   end
 end

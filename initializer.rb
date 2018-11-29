@@ -7,6 +7,7 @@ require 'bundler/setup'
 Bundler.require(:default)
 
 # require all initializers/*.rb
+require_relative 'initializers/multi_logger'
 Dir.each_child('initializers') {|file| require_relative "initializers/#{file}" }
 
 # require all models/*.rb

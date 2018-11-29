@@ -1,5 +1,8 @@
 # sqlite database
 *.db
 
+# log
+*.log
+
 # osx system file
 .DS_Store
