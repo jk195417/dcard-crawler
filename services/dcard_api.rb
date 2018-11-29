@@ -30,8 +30,8 @@ class DcardAPI
   end
 
   def self.post_comments(pid, after: nil)
-    link = "#{@@root}/posts/#{pid}/comments"
-    link = "#{@@root}/posts/#{pid}/comments&after=#{after}" unless after.nil?
+    link = "#{@@root}/posts/#{pid}/comments?limit=100"
+    link += "&after=#{after}" unless after.nil?
     link
   end
 end
