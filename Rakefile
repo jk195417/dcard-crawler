@@ -69,37 +69,25 @@ task :run do
 end
 
 namespace :run do
-  desc '獲取並更新所有的 Forums，帶入參數 c 進入命令列模式'
-  task :update_forums, :console do |_task, args|
-    puts '獲取並更新所有的 Forums'
-    if args.console == 'c'
-      puts '進入命令列模式'
-      App.update_forums(console: true)
-    else
-      App.update_forums
-    end
+  desc '獲取並更新所有的 Forums'
+  task :update_forums do
+    c = !ARGV[1].nil?
+    App.update_forums(console: c)
+    abort # needed stop other tasks
   end
 
-  desc '獲取 100 則 Post，帶入參數 c 進入命令列模式'
-  task :get_posts, :console do |_task, args|
-    puts '獲取最新的 100 則 Post'
-    if args.console == 'c'
-      puts '進入命令列模式'
-      App.get_posts(console: true)
-    else
-      App.get_posts
-    end
+  desc '獲取 100 則 Post'
+  task :get_posts do
+    c = !ARGV[1].nil?
+    App.get_posts(console: c)
+    abort # needed stop other tasks
   end
 
-  desc '獲取每個 Forum 各 100 則 Post，帶入參數 c 進入命令列模式'
-  task :get_forums_posts, :console do |_task, args|
-    puts '獲取每個 Forum 各 100 則 Post'
-    if args.console == 'c'
-      puts '進入命令列模式'
-      App.get_forums_posts(console: true)
-    else
-      App.get_forums_posts
-    end
+  desc '獲取每個 Forum 各 100 則 Post'
+  task :get_forums_posts do
+    c = !ARGV[1].nil?
+    App.get_forums_posts(console: c)
+    abort # needed stop other tasks
   end
 end
 
