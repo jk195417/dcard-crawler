@@ -1,6 +1,8 @@
 require_relative 'initializer'
 
 module App
+  @@workers = Workers.new(thread_number: 4)
+
   def self.run()
     binding.pry
   end
@@ -19,28 +21,26 @@ module App
   end
 
   def self.get_forums_posts(console: false, recent: false)
-    workers = Workers.new(thread_number: 4)
     forums = Forum.all
     new_posts = []
     forums.each do |forum|
-      workers.add_task do
+      @@workers.add_task do
         new_posts += forum.new_posts_from_dcard(recent: recent).to_a
       end
     end
-    workers.work
+    @@workers.work
     $db[:posts].multi_insert(new_posts)
     $logger.info { "Get #{new_posts.size} new posts and inserted into database" }
     binding.pry if console
   end
 
   def self.get_posts(console: false)
-    workers = Workers.new(thread_number: 4)
     new_posts = []
     oldest_post = Post.oldest
     response = HTTP.get(DcardAPI.posts(popular: true, before: oldest_post&.dcard_id))
     posts = JSON.parse(response.to_s)
     posts.each do |post|
-      workers.add_task do
+      @@workers.add_task do
         unless Post.find(dcard_id: post['id'])
           forum = Forum.find(name: post['forumName'])
           new_post = Post.load_from_dcard(post)
@@ -51,7 +51,7 @@ module App
         $logger.error { e.inspect }
       end
     end
-    workers.work
+    @@workers.work
     $db[:posts].multi_insert(new_posts)
     binding.pry if console
   end
