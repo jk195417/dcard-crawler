@@ -21,9 +21,8 @@ module App
   end
 
   def self.get_forums_posts(console: false, recent: false)
-    forums = Forum.all
     new_posts = []
-    forums.each do |forum|
+    Forum.all.each do |forum|
       @@workers.add_task do
         new_posts += forum.new_posts_from_dcard(recent: recent).to_a
       end
