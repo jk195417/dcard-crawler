@@ -1,5 +1,6 @@
 class Post < Sequel::Model
   many_to_one :forum
+  one_to_many :comments
 
   def self.load_from_dcard(data)
     { dcard_id: data['id'],

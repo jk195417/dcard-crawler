@@ -61,5 +61,29 @@ Sequel.migration do
       
       index [:dcard_id], :name=>:sqlite_autoindex_posts_1, :unique=>true
     end
+    
+    create_table(:comments, :ignore_index_errors=>true) do
+      primary_key :id
+      Integer :dcard_post_id
+      Integer :floor
+      Integer :like_count
+      String :content, :text=>true
+      String :dcard_id, :size=>255
+      String :gender, :size=>255
+      String :school, :size=>255
+      String :department, :size=>255
+      String :report_reason, :size=>255
+      TrueClass :anonymous
+      TrueClass :with_nickname
+      TrueClass :hidden_by_author
+      TrueClass :host
+      TrueClass :hidden
+      TrueClass :in_review
+      DateTime :created_at
+      DateTime :updated_at
+      foreign_key :post_id, :posts
+      
+      index [:dcard_post_id, :floor], :name=>:sqlite_autoindex_comments_1, :unique=>true
+    end
   end
 end
