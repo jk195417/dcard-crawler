@@ -1,5 +1,4 @@
 require_relative 'app'
-Sequel.extension :migration
 
 namespace :g do
   desc '生成 migration'
