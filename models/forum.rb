@@ -39,6 +39,6 @@ class Forum < Sequel::Model
     end
     new_posts
   rescue => e
-    puts "\nError when processing Forum id=#{self.id} name=#{self.alias}\n#{e.inspect}\n"
+    puts "\nError when getting post from Forum name=#{self.alias}\n#{e.inspect}\n"
   end
 end

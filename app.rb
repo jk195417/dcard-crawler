@@ -23,24 +23,13 @@ module App
     forums = Forum.all
     new_posts = []
     forums.each do |forum|
-      oldest_post = (recent ? nil : Post.oldest(forum_id: forum.id))
-      posts = JSON.parse(HTTP.get(DcardAPI.forum_posts(forum.alias, before: oldest_post&.dcard_id)).to_s)
-      posts.each do |post|
-        workers.add_task do
-          unless Post.find(dcard_id: post['id'])
-            new_post = Post.load_from_dcard(post)
-            new_post[:forum_id] = forum.id
-            new_posts << new_post
-          end
-        rescue => e
-          puts e.inspect
-        end
+      workers.add_task do
+        new_posts += forum.new_posts_from_dcard(recent: recent).to_a
       end
-    rescue => e
-      puts e.inspect
     end
     workers.work
     $db[:posts].multi_insert(new_posts)
+    puts "Get #{new_posts.size} new posts and inserted into database"
     binding.pry if console
   end
 
