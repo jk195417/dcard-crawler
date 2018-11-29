@@ -23,6 +23,10 @@ class Comment < Sequel::Model
     }
   end
 
+  def self.latest(dcard_post_id)
+    Comment.where(dcard_post_id: dcard_post_id).order(Sequel.desc(:floor)).first
+  end
+
   def load_from_dcard(data)
     self.class.new(self.class.load_from_dcard(data))
   end
