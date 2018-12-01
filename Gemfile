@@ -10,6 +10,7 @@ gem 'http' # http client
 # database
 gem 'sequel' # toolkit
 gem 'sqlite3' # sqlite
+gem 'pg' # postgres
 
 # debugger
 gem 'pry'

@@ -2,13 +2,13 @@ Sequel.migration do
   change do
     create_table(:forums, :ignore_index_errors=>true) do
       primary_key :id
-      String :dcard_id, :size=>255
-      String :alias, :size=>255
-      String :name, :size=>255
-      String :description, :size=>255
-      String :title_placeholder, :size=>255
-      String :subcategories, :size=>255
-      String :topics, :size=>255
+      String :dcard_id, :text=>true
+      String :alias, :text=>true
+      String :name, :text=>true
+      String :description, :text=>true
+      String :title_placeholder, :text=>true
+      String :subcategories, :text=>true
+      String :topics, :text=>true
       Integer :subscription_count
       TrueClass :is_school
       TrueClass :can_post
@@ -20,9 +20,9 @@ Sequel.migration do
       DateTime :created_at
       DateTime :updated_at
       
-      index [:dcard_id], :name=>:sqlite_autoindex_forums_1, :unique=>true
-      index [:alias], :name=>:sqlite_autoindex_forums_2, :unique=>true
-      index [:name], :name=>:sqlite_autoindex_forums_3, :unique=>true
+      index [:alias], :name=>:forums_alias_key, :unique=>true
+      index [:dcard_id], :name=>:forums_dcard_id_key, :unique=>true
+      index [:name], :name=>:forums_name_key, :unique=>true
     end
     
     create_table(:schema_info) do
@@ -35,16 +35,16 @@ Sequel.migration do
       Integer :reply_id
       Integer :comment_count
       Integer :like_count
-      String :title, :size=>255
+      String :title, :text=>true
       String :excerpt, :text=>true
-      String :tags, :size=>255
-      String :topics, :size=>255
-      String :forum_name, :size=>255
-      String :forum_alias, :size=>255
-      String :gender, :size=>255
-      String :school, :size=>255
-      String :department, :size=>255
-      String :reply_title, :size=>255
+      String :tags, :text=>true
+      String :topics, :text=>true
+      String :forum_name, :text=>true
+      String :forum_alias, :text=>true
+      String :gender, :text=>true
+      String :school, :text=>true
+      String :department, :text=>true
+      String :reply_title, :text=>true
       String :reactions, :text=>true
       String :custom_style, :text=>true
       String :media, :text=>true
@@ -57,9 +57,9 @@ Sequel.migration do
       TrueClass :with_videos
       DateTime :created_at
       DateTime :updated_at
-      foreign_key :forum_id, :forums
+      foreign_key :forum_id, :forums, :key=>[:id]
       
-      index [:dcard_id], :name=>:sqlite_autoindex_posts_1, :unique=>true
+      index [:dcard_id], :name=>:posts_dcard_id_key, :unique=>true
     end
     
     create_table(:comments, :ignore_index_errors=>true) do
@@ -68,11 +68,11 @@ Sequel.migration do
       Integer :floor
       Integer :like_count
       String :content, :text=>true
-      String :dcard_id, :size=>255
-      String :gender, :size=>255
-      String :school, :size=>255
-      String :department, :size=>255
-      String :report_reason, :size=>255
+      String :dcard_id, :text=>true
+      String :gender, :text=>true
+      String :school, :text=>true
+      String :department, :text=>true
+      String :report_reason, :text=>true
       TrueClass :anonymous
       TrueClass :with_nickname
       TrueClass :hidden_by_author
@@ -81,9 +81,9 @@ Sequel.migration do
       TrueClass :in_review
       DateTime :created_at
       DateTime :updated_at
-      foreign_key :post_id, :posts
+      foreign_key :post_id, :posts, :key=>[:id]
       
-      index [:dcard_post_id, :floor], :name=>:sqlite_autoindex_comments_1, :unique=>true
+      index [:dcard_post_id, :floor], :name=>:comments_dcard_post_id_floor_key, :unique=>true
     end
   end
 end
