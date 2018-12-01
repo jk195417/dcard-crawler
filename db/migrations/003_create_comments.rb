@@ -17,8 +17,8 @@ Sequel.migration do
 			TrueClass :host
 			TrueClass :hidden
 			TrueClass :in_review
-			Datetime :created_at
-			Datetime :updated_at
+			DateTime :created_at
+			DateTime :updated_at
 			foreign_key :post_id, :posts
 			unique [:dcard_post_id, :floor]
 		end

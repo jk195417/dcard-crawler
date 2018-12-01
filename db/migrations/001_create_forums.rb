@@ -18,8 +18,8 @@ Sequel.migration do
 		  TrueClass :can_use_nickname
 		  TrueClass :should_categorized
 		  TrueClass :nsfw
-		  Datetime :created_at
-		  Datetime :updated_at
+		  DateTime :created_at
+		  DateTime :updated_at
 		end
 	end
 end

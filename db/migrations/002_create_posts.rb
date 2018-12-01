@@ -27,8 +27,8 @@ Sequel.migration do
 		  TrueClass :hidden
 		  TrueClass :with_images
 		  TrueClass :with_videos
-		  Datetime :created_at
-		  Datetime :updated_at
+		  DateTime :created_at
+		  DateTime :updated_at
 		  foreign_key :forum_id, :forums
 		end
 	end
