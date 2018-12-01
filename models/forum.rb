@@ -27,10 +27,10 @@ class Forum < Sequel::Model
     self.class.new(self.class.load_from_dcard(data))
   end
 
-  def new_posts_from_dcard(recent: false)
-    oldest_post = (recent ? nil : Post.oldest(forum_id: self.id))
-    posts = JSON.parse(HTTP.get(DcardAPI.forum_posts(self.alias, before: oldest_post&.dcard_id)).to_s)
+  def new_posts_from_dcard(recent: false, popular: false)
     new_posts = []
+    oldest_post = (recent ? nil : Post.oldest(forum_id: self.id))
+    posts = JSON.parse(HTTP.get(DcardAPI.forum_posts(self.alias, popular: popular, before: oldest_post&.dcard_id)).to_s)
     posts.each do |post|
       next if Post.find(dcard_id: post['id'])
       new_post = Post.load_from_dcard(post)
@@ -39,6 +39,7 @@ class Forum < Sequel::Model
     end
     new_posts
   rescue => e
-    $logger.error { "Error when getting post from Forum name=#{self.alias}\n#{e.inspect}" }
+    $logger.error "Error when getting post from Forum name=#{self.alias} #{e.inspect}"
+    new_posts
   end
 end
