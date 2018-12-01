@@ -16,7 +16,7 @@ namespace :g do
       f << "\tend\n"
       f << 'end'
     end
-    $logger.debug { "migration file #{filename} created at #{folder}" }
+    $logger.debug "migration file #{filename} created at #{folder}"
     abort # needed stop other tasks
   end
 end
@@ -26,12 +26,12 @@ namespace :db do
   task :version do
     version = 0
     version = $db[:schema_info].first[:version] if $db.tables.include?(:schema_info)
-    $logger.debug { "Schema Version: #{version}" }
+    $logger.debug "Schema Version: #{version}"
   end
 
   desc 'Dump Database Schema To db/schema.rb'
   task :dump_schema do
-    $logger.debug { 'Dump Database Schema To db/schema.rb' }
+    $logger.debug 'Dump Database Schema To db/schema.rb'
     system("sequel -d #{ENV['DATABASE_URL']} > db/schema.rb")
   end
 
@@ -47,7 +47,7 @@ namespace :db do
     version = ($db.tables.include?(:schema_info) ? $db[:schema_info].first[:version] : 0)
     target = ARGV[1] || version - 1
     if version.to_i == 0
-      $logger.debug { 'no migration can be rollback' }
+      $logger.debug 'no migration can be rollback'
     else
       Sequel::Migrator.run($db, 'db/migrations', target: target.to_i)
       Rake::Task['db:version'].execute
@@ -90,7 +90,7 @@ namespace :run do
   end
 end
 
-task :run => 'db:check_migrated'
+task run: 'db:check_migrated'
 task 'run:update_forums' => 'db:check_migrated'
 task 'run:get_posts' => 'db:check_migrated'
 task 'run:get_forums_posts' => 'db:check_migrated'
