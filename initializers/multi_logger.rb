@@ -4,6 +4,7 @@ class MultiLogger
   def initialize(file_path)
     @stdout_logger = Logger.new(STDOUT)
     @file_logger = Logger.new(file_path)
+    @file_logger.level = :info
   end
 
   def debug(message)

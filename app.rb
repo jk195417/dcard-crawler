@@ -1,7 +1,7 @@
 require_relative 'initializer'
 
 module App
-  @@workers = Workers.new(thread_number: 4)
+  @@workers = Workers.new(thread_number: 10)
 
   def self.run()
     binding.pry
