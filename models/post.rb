@@ -3,7 +3,8 @@ class Post < Sequel::Model
   one_to_many :comments
 
   def self.load_from_dcard(data)
-    { dcard_id: data['id'],
+    {
+      dcard_id: data['id'],
       reply_id: data['replyId'],
       comment_count: data['commentCount'],
       like_count: data['likeCount'],
@@ -28,7 +29,8 @@ class Post < Sequel::Model
       with_images: data['withImages'],
       with_videos: data['withVideos'],
       created_at: DateTime.parse(data['createdAt']),
-      updated_at: DateTime.parse(data['updatedAt']) }
+      updated_at: DateTime.parse(data['updatedAt'])
+    }
   end
 
   def self.oldest(forum_id: nil)
@@ -39,5 +41,21 @@ class Post < Sequel::Model
 
   def load_from_dcard(data)
     self.class.new(self.class.load_from_dcard(data))
+  end
+
+  def comments_from_dcard(after: nil)
+    new_comments = []
+    comments = JSON.parse(HTTP.get(DcardAPI.post_comments(self.dcard_id, after: after)))
+    return [] unless comments.is_a?(Array)
+    return [] if comments.empty?
+    comments.each do |comment|
+      new_comment = Comment.load_from_dcard(comment)
+      new_comment[:post_id] = self.id
+      new_comments << new_comment
+    end
+    new_comments
+  rescue => e
+    $logger.error "Error when getting comments from Post forum=#{self.forum_alias} dcard_id=#{self.dcard_id} #{e.inspect}"
+    new_comments
   end
 end
