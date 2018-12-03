@@ -37,5 +37,3 @@ class MultiLogger
     @file_logger.close
   end
 end
-
-$logger = MultiLogger.new('log/app.log')

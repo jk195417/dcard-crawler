@@ -1,0 +1,16 @@
+local: &local
+  adapter: postgresql
+  encoding: unicode
+  timeout: 5000
+  host: localhost
+  pool: 20
+
+development: &development
+  <<: *local
+  database: dcard_crawler_dev
+
+test: &test
+  <<: *local
+  database: dcard_crawler_test
+
+production:

@@ -1,6 +1,6 @@
-class Post < Sequel::Model
-  many_to_one :forum
-  one_to_many :comments
+class Post < ActiveRecord::Base
+  belongs_to :forum, counter_cache: true
+  has_many :comments
 
   def self.load_from_dcard(data)
     {
@@ -33,19 +33,14 @@ class Post < Sequel::Model
     }
   end
 
-  def self.oldest(forum_id: nil)
-    result = Post
-    result = result.where(forum_id: forum_id) if forum_id
-    result.order(Sequel.asc(:dcard_id)).first
-  end
-
   def load_from_dcard(data)
     self.class.new(self.class.load_from_dcard(data))
   end
 
-  def comments_from_dcard(after: nil)
+  def new_comments_from_dcard(after: nil)
     new_comments = []
-    comments = JSON.parse(HTTP.get(DcardAPI.post_comments(self.dcard_id, after: after)))
+    api = DcardAPI.post_comments(self.dcard_id, after: after)
+    comments = JSON.parse(HTTP.get(api).to_s)
     return [] unless comments.is_a?(Array)
     return [] if comments.empty?
     comments.each do |comment|
@@ -55,7 +50,7 @@ class Post < Sequel::Model
     end
     new_comments
   rescue => e
-    $logger.error "Error when getting comments from Post forum=#{self.forum_alias} dcard_id=#{self.dcard_id} #{e.inspect}"
+    App.logger.error "Error when getting comments from #{api} #{e.inspect}"
     new_comments
   end
 end
