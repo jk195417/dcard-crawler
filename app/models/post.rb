@@ -41,17 +41,28 @@ class Post < ActiveRecord::Base
 
   def new_comments_from_dcard(after: nil)
     new_comments = []
-    api = DcardAPI.post_comments(self.dcard_id, after: after)
+    api = DcardAPI.post_comments(dcard_id, after: after)
     comments = JSON.parse(HTTP.get(api).to_s)
-    return [] unless comments.is_a?(Array)
-    return [] if comments.empty?
+
+    # check post not removed
+    unless comments.is_a?(Array)
+      if comments.fetch('error') { nil }.to_i == 1202
+        reason = comments.fetch('reason') { '' }
+        update!(removed: reason)
+      end
+      return new_comments
+    end
+
+    # check comments present
+    return new_comments if comments.blank?
+
     comments.each do |comment|
       new_comment = Comment.load_from_dcard(comment)
-      new_comment[:post_id] = self.id
+      new_comment[:post_id] = id
       new_comments << new_comment
     end
     new_comments
-  rescue => e
+  rescue StandardError => e
     App.logger.error "Error when getting comments from #{api} #{e.inspect}"
     new_comments
   end
