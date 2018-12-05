@@ -2,6 +2,8 @@ class Post < ActiveRecord::Base
   belongs_to :forum, counter_cache: true
   has_many :comments
 
+  scope :not_removed, -> { where(removed: nil) }
+
   def self.load_from_dcard(data)
     {
       dcard_id: data['id'],

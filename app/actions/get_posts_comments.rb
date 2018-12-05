@@ -1,6 +1,6 @@
 module App::Actions
-  def get_posts_comments(console: false)
-    Post.where('comments_count < comment_count').find_each do |post|
+  def get_posts_comments
+    Post.not_removed.where('comment_count > 0').where(comments_count: 0).find_each do |post|
       App.workers.add_task do
         begin
           import_comments = []
