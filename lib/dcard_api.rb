@@ -9,9 +9,10 @@ class DcardAPI
     "#{@@root}/forums/#{name}"
   end
 
-  def self.forum_posts(name, before: nil, popular: false)
+  def self.forum_posts(name, before: nil, after: nil, popular: false)
     link = "#{@@root}/forums/#{name}/posts?limit=100&popular=#{popular}"
     link += "&before=#{before}" unless before.nil?
+    link += "&after=#{after}" unless after.nil?
     link
   end
 
