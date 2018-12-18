@@ -1,5 +1,5 @@
 class Forum < ActiveRecord::Base
-  has_many :posts
+  has_many :posts, dependent: :destroy
 
   def self.load_from_dcard(data)
     {
@@ -48,7 +48,7 @@ class Forum < ActiveRecord::Base
     end
     new_posts
   rescue StandardError => e
-    App.logger.error "Error when getting post from Forum name=#{self.alias} #{e.inspect}"
+    App.logger.error "Error when getting forum #{id} posts from #{api} #{e.inspect}"
     new_posts
   end
 end

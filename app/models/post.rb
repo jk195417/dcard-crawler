@@ -1,6 +1,6 @@
 class Post < ActiveRecord::Base
   belongs_to :forum, counter_cache: true
-  has_many :comments
+  has_many :comments, dependent: :destroy
 
   scope :not_removed, -> { where(removed: nil) }
 
@@ -63,7 +63,7 @@ class Post < ActiveRecord::Base
     end
     new_comments
   rescue StandardError => e
-    App.logger.error "Error when getting comments from #{api} #{e.inspect}"
+    App.logger.error "Error when getting post #{dcard_id} comments from #{api} #{e.inspect}"
     new_comments
   end
 end
