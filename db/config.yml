@@ -3,7 +3,7 @@ local: &local
   encoding: unicode
   timeout: 5000
   host: localhost
-  pool: 20
+  pool: 25
 
 development: &development
   <<: *local
