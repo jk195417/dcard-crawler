@@ -37,8 +37,14 @@
     $ bundle install
     ```
 
-7.  執行
+7.  設置與資料庫的連線
 
+    ```env
+    # 把 `config/.env.example` 改成 `config/.env`，填入 DB_USERNAME DB_PASSWORD 與 REDIS_URL
+    DB_USERNAME='db username'
+    DB_PASSWORD='db password'
+    REDIS_URL='redis://$ip:$port/$db'
+    ```
     ```bash
     # 執行主程式
     $ rake run

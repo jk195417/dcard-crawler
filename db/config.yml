@@ -4,6 +4,8 @@ local: &local
   timeout: 5000
   host: localhost
   pool: 25
+  username: "<%= ENV['DB_USERNAME'] %>"
+  password: "<%= ENV['DB_PASSWORD'] %>"
 
 development: &development
   <<: *local
