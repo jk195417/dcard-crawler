@@ -5,5 +5,5 @@ StandaloneMigrations::Tasks.load_tasks
 
 desc '進入互動模式'
 task run: :environment do
-  App.run
+  App::Actions.run
 end

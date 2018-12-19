@@ -1,4 +1,5 @@
 module App::Actions
+  extend self
   def update_forums
     new_forums = []
     response = JSON.parse(HTTP.get(DcardAPI.forums).to_s)

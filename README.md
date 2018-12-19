@@ -45,12 +45,19 @@
     DB_PASSWORD='db password'
     REDIS_URL='redis://$ip:$port/$db'
     ```
+
+8.  執行
+
     ```bash
+    # 建立資料庫
+    $ rake db:create
+    $ rake db:migrate
+
     # 執行主程式
     $ rake run
-
-    # 執行命令列模式
-    $ rake run:c
+    > App::Actions.update_forums
+    > App::Actions.get_forums_posts
+    > App::Actions.get_posts_comments
 
     # 執行 sidekiq
     $ sidekiq -C config/sidekiq.yml -r ./bootstrap.rb
