@@ -11,6 +11,7 @@ class Post < ActiveRecord::Base
       comment_count: data['commentCount'],
       like_count: data['likeCount'],
       title: data['title'],
+      content: data['content'],
       excerpt: data['excerpt'],
       tags: data['tags'].to_s,
       topics: data['topics'].to_s,
@@ -35,8 +36,17 @@ class Post < ActiveRecord::Base
     }
   end
 
+  def api
+    DcardAPI.post(dcard_id)
+  end
+
   def load_from_dcard(data)
-    self.class.new(self.class.load_from_dcard(data))
+    new_values = self.class.load_from_dcard(data)
+    assign_attributes(new_values)
+  end
+
+  def pull_from_dcard
+    load_from_dcard(JSON.parse(HTTP.get(api).to_s))
   end
 
   def new_comments_from_dcard(after: nil)

@@ -23,8 +23,17 @@ class Forum < ActiveRecord::Base
     }
   end
 
+  def api
+    DcardAPI.forum(self.alias)
+  end
+
   def load_from_dcard(data)
-    self.class.new(self.class.load_from_dcard(data))
+    new_values = self.class.load_from_dcard(data)
+    assign_attributes(new_values)
+  end
+
+  def pull_from_dcard
+    load_from_dcard(JSON.parse(HTTP.get(api).to_s))
   end
 
   def new_posts_from_dcard(recent: false, popular: false)
