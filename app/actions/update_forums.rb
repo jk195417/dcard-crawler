@@ -9,5 +9,6 @@ module App::Actions
       forum.nil? ? (new_forums << f) : forum.update(f)
     end
     Forum.import(new_forums)
+    App.logger.info "All fourms is up to date."
   end
 end
