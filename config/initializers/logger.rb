@@ -3,7 +3,7 @@ module App
   @@logger_formatter = proc { |severity, datetime, progname, msg|
     case severity
     when "DEBUG"
-      logger_original_formatter.call(severity.light_green, datetime, progname, msg)
+      logger_original_formatter.call(severity.light_blue, datetime, progname, msg)
     when "INFO"
       logger_original_formatter.call(severity.green, datetime, progname, msg)
     when "WARN"
