@@ -46,7 +46,12 @@ class Post < ActiveRecord::Base
   end
 
   def pull_from_dcard
-    load_from_dcard(JSON.parse(HTTP.get(api).to_s))
+    response = JSON.parse(HTTP.get(api).to_s)
+    if response.fetch('error') { nil }.to_i == 1202
+      assign_attributes({ removed: response.fetch('reason') { '' } })
+    else
+      load_from_dcard(response)
+    end
   end
 
   def new_comments_from_dcard(after: nil)
