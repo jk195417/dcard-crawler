@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_20_091432) do
+ActiveRecord::Schema.define(version: 2019_01_17_123221) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_091432) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "post_id"
+    t.float "embedding", array: true
     t.index ["post_dcard_id", "floor"], name: "index_comments_on_post_dcard_id_and_floor", unique: true
     t.index ["post_id"], name: "index_comments_on_post_id"
   end
@@ -93,6 +94,7 @@ ActiveRecord::Schema.define(version: 2018_12_20_091432) do
     t.bigint "forum_id"
     t.string "removed"
     t.text "content"
+    t.float "embedding", array: true
     t.index ["dcard_id"], name: "index_posts_on_dcard_id", unique: true
     t.index ["forum_id"], name: "index_posts_on_forum_id"
   end
