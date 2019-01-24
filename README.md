@@ -60,5 +60,8 @@
     > App::Actions.get_posts_comments
 
     # 執行 sidekiq
-    $ sidekiq -C config/sidekiq.yml -r ./bootstrap.rb
+    $ sidekiq -C ./config/sidekiq.yml -r ./config/boot.rb
+
+    # 執行 bert server
+    $ bert-serving-start -model_dir ~/下載/multi_cased_L-12_H-768_A-12 -num_worker=2
     ```
