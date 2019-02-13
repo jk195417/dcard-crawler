@@ -9,3 +9,13 @@
 
 # environment file
 .env
+
+# editer config
+.vscode/*
+
+# python virtual environment
+python3_virtual_environment/*
+
+# bert model
+bert_model/*
+
