@@ -14,6 +14,9 @@ gem 'pg' # Postgres Database
 gem 'sidekiq' # Threading workers
 gem 'colorize' # colorize string
 gem 'pycall' # call python lib
+gem 'dotenv' # Load Environment Variables From `.env`
+
 gem 'pry' # Debugger
 gem 'pry-nav' # pry Extension
-gem 'dotenv' # Load Environment Variables From `.env`.
+gem 'memory_profiler' # Show Memory Usage
+gem 'rbtrace' # Trace code
