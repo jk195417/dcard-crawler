@@ -83,7 +83,6 @@ GEM
     pry-nav (0.2.4)
       pry (>= 0.9.10, < 0.11.0)
     public_suffix (3.0.3)
-    pycall (1.0.3)
     rack (2.0.6)
     rack-protection (2.0.4)
       rack
@@ -137,7 +136,6 @@ DEPENDENCIES
   pg
   pry
   pry-nav
-  pycall
   rake
   rbtrace
   sidekiq

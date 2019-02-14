@@ -4,64 +4,67 @@
 
 爬取 Dcard 上的文章與留言做數據分析。
 
-## 使用說明
+## Setup
 
-1.  安裝 `ruby` (有的人可以跳過這個步驟)
+參考 <https://github.com/jk195417/dcard-crawler/wiki#建立實驗環境>
 
-    參考 <https://www.ruby-lang.org>
+## Usage
 
-2.  安裝 `bundler` (有的人可以跳過這個步驟)
+1.  安裝 Ruby 外部函式庫
 
-    ```bash
-    $ gem install bundler
-    ```
+```bash
+$ bundle install
+```
 
-3.  安裝 `Postgres` (有的人可以跳過這個步驟)
+2.  設置環境變數
 
-    參考 <https://www.postgresql.org/download/>
+```env
+# 把 `config/.env.example` 改成 `config/.env`，填入 `DB_USERNAME` `DB_PASSWORD` `REDIS_URL` `BERT_AS_SERVICE_URL`
+DB_USERNAME='db username'
+DB_PASSWORD='db password'
+REDIS_URL='redis://$ip:$port/$db'
+BERT_AS_SERVICE_URL='http://0.0.0.0:8125'
+```
 
-4.  安裝 `Redis` (有的人可以跳過這個步驟)
+3.  建立資料庫
 
-    參考 <https://redis.io/download#installation>
+```bash
+$ rake db:create
+$ rake db:schema:load
+```
 
-5.  下載此專案
+4.  啟動 sidekiq
 
-    ```bash
-    $ git clone https://github.com/jk195417/dcard-crawler.git
-    $ cd dcard-crawler
-    ```
+```bash
+$ sidekiq -C ./config/sidekiq.yml -r ./config/boot.rb
+```
 
-6.  安裝 `ruby` 外部函式庫
+5.  啟動 Python 3 Virtual Environment
 
-    ```bash
-    $ bundle install
-    ```
+```bash
+$ source python3_virtual_environment/bin/activate
+```
 
-7.  設置與資料庫的連線
+6.  啟動 bert_as_service
 
-    ```env
-    # 把 `config/.env.example` 改成 `config/.env`，填入 DB_USERNAME DB_PASSWORD 與 REDIS_URL
-    DB_USERNAME='db username'
-    DB_PASSWORD='db password'
-    REDIS_URL='redis://$ip:$port/$db'
-    ```
+至 <https://github.com/google-research/bert> 下載 model 到 bert_model 資料夾中
 
-8.  執行
+```bash
+# 執行 bert server (1 worker require 1.4 G RAM, if your GPU have 6 G RAM, you can handle num_worker=4)
+$ bert-serving-start -model_dir=../bert_model/multi_cased_L-12_H-768_A-12 -num_worker=4 -http_port=8125 -http_max_connect=20
+```
 
-    ```bash
-    # 建立資料庫
-    $ rake db:create
-    $ rake db:migrate
+7.  執行
 
-    # 執行主程式
-    $ rake run
-    > App::Actions.update_forums
-    > App::Actions.get_forums_posts
-    > App::Actions.get_posts_comments
-
-    # 執行 sidekiq
-    $ sidekiq -C ./config/sidekiq.yml -r ./config/boot.rb
-
-    # 執行 bert server
-    $ bert-serving-start -model_dir ~/下載/multi_cased_L-12_H-768_A-12 -num_worker=2
-    ```
+```bash
+# 執行主程式
+$ rake run
+# 下載每個板的資訊
+> App::Actions.update_forums
+# 下載貼文
+> App::Actions.get_posts
+# 下載留言
+> App::Actions.get_comments
+# 計算留言的 word embeddings
+> App::Actions.get_comments_embeddings
+```

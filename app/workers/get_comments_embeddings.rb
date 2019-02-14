@@ -10,18 +10,12 @@ class GetCommentsEmbeddings
     comments.each do |comment|
       comment_ids << comment[0]
       comment_contents << comment[1]
-    end 
+    end
 
     # get comments embeddings
     bc = BertClient.new
-    comment_embeddings = bc.encode(comment_contents)
-    bc.close
-
-    data = []
-    comment_ids.each.with_index do |id, index|
-      embedding = PyCall::List.call(comment_embeddings[index]).to_a
-      data << { id: id, embedding: embedding }
-    end
+    embeddings = bc.encode(first_comment_id, comment_contents)
+    data = comment_ids.map.with_index { |id, index| { id: id, embedding: embeddings[index] } } 
 
     # bulk update comments at one sql, like a upsert.
     Comment.import data, on_duplicate_key_update: [:embedding]
