@@ -40,6 +40,10 @@ class Post < ActiveRecord::Base
     DcardAPI.post(dcard_id)
   end
 
+  def dcard_url
+    "https://dcard.tw/f/#{forum_alias}/p/#{dcard_id}"
+  end
+
   def load_from_dcard(data)
     new_values = self.class.load_from_dcard(data)
     assign_attributes(new_values)
