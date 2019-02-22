@@ -1,4 +1,18 @@
-# Forum with echo chamber effect
+# Observation Note
+
+## Rule
+
+post
+
+-   post comments > 10
+-   not school forums
+
+comment
+
+-   not hidden; hidden = true and content is null
+-   have content; (TRIM(content) = '') is true
+
+## Forum with echo chamber effect
 
 these forum might have higher echo chamber effect in comments
 
