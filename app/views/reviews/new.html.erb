@@ -1,0 +1,14 @@
+<div class="container-fluid min-vh-100">
+  <div class="row">
+    <div class="col-4">
+      <%= render 'shared/logo' %>
+      <div class="fixed-bottom p-5">
+        <%= render 'form', review: @review %>
+        <%= link_to 'Back', reviews_path, class: 'btn btn-outline-secondary mt-2' %>
+      </div>
+    </div>
+    <div class="col-8">
+      <%= render 'posts/post', post: @post %>
+    </div>
+  </div>
+</div>

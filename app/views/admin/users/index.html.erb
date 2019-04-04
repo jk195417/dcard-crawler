@@ -1,0 +1,32 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <%= paginate @users %>
+  <table class="table mt-2">
+    <thead class="thead-light">
+      <tr>
+        <th>ID</th>
+        <th>Email</th>
+        <th>Reviews</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= user.id %></td>
+          <td><%= user.email %></td>
+          <td><%= user.reviews_count %></td>
+          <td>
+            <%= link_to admin_reviews_path(user_id: user.id), class: 'btn btn-sm btn-outline-secondary m-1' do %>
+              <i class="far fa-file-alt"></i> Show reviews
+            <% end %>
+            <%= link_to admin_user_path(user), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <i class="fas fa-trash"></i> Destroy
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @users %>
+</div>

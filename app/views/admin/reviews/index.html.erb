@@ -1,0 +1,29 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <%= paginate @reviews %>
+  <table class="table mt-2">
+    <thead class="thead-light">
+      <tr>
+        <th>Forum / Title</th>
+        <th>User</th>
+        <th>Echo Chamber</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reviews.each do |review| %>
+        <tr>
+          <td><%= link_to review.post.forum_name, admin_forum_path(review.post.forum_id) %> / <%= link_to review.post.title, admin_post_path(review.post) %></td>
+          <td><%= link_to review.user.email, admin_users_path(user_id: review.user_id) %></td>
+          <td><%= review.echo_chamber %></td>
+          <td>
+            <%= link_to admin_review_path(review), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <i class="fas fa-trash"></i> Destroy
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @reviews %>
+</div>

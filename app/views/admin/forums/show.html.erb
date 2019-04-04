@@ -1,0 +1,18 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <div class="d-flex my-2">
+    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <%= link_to admin_posts_path(forum_id: @forum.id), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
+      <i class="far fa-file-alt"></i> Show posts
+    <% end %>
+    <%= link_to admin_forum_path(@forum), method: :patch, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl posts
+    <% end %>
+    <%= link_to admin_forum_path(@forum), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+      <i class="fas fa-trash"></i> Destroy
+    <% end %>
+  </div>
+  <%= render 'forums/forum', forum: @forum %>
+</div>

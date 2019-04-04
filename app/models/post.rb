@@ -1,8 +1,14 @@
-class Post < ActiveRecord::Base
+class Post < ApplicationRecord
+  include Dcard::LoadData
+
   belongs_to :forum, counter_cache: true
   has_many :comments, dependent: :destroy
+  has_many :reviews, dependent: :destroy
 
   scope :not_removed, -> { where(removed: nil) }
+  scope :crawled, -> { where('comment_count = comments_count') }
+  scope :comments_more_then, ->(number) { where('comments_count > ?', number) }
+  scope :reviewable, -> { not_removed.crawled.comments_more_then(10) }
 
   def self.load_from_dcard(data)
     {
@@ -31,28 +37,19 @@ class Post < ActiveRecord::Base
       hidden: data['hidden'],
       with_images: data['withImages'],
       with_videos: data['withVideos'],
-      created_at: DateTime.parse(data['createdAt']),
-      updated_at: DateTime.parse(data['updatedAt'])
+      created_at: Time.parse(data['createdAt']),
+      updated_at: Time.parse(data['updatedAt'])
     }
   end
 
-  def api
-    DcardAPI.post(dcard_id)
-  end
-
   def dcard_url
-    "https://dcard.tw/f/#{forum_alias}/p/#{dcard_id}"
-  end
-
-  def load_from_dcard(data)
-    new_values = self.class.load_from_dcard(data)
-    assign_attributes(new_values)
+    "https://www.dcard.tw/f/#{forum_alias}/p/#{dcard_id}"
   end
 
   def pull_from_dcard
-    response = JSON.parse(HTTP.get(api).to_s)
+    response = JSON.parse(HTTP.get(Dcard::Api.post(dcard_id)).to_s)
     if response.fetch('error') { nil }.to_i == 1202
-      assign_attributes({ removed: response.fetch('reason') { '' } })
+      assign_attributes(removed: response.fetch('reason') { '' })
     else
       load_from_dcard(response)
     end
@@ -60,7 +57,7 @@ class Post < ActiveRecord::Base
 
   def new_comments_from_dcard(after: nil)
     new_comments = []
-    api = DcardAPI.post_comments(dcard_id, after: after)
+    api = Dcard::Api.post_comments(dcard_id, after: after)
     comments = JSON.parse(HTTP.get(api).to_s)
 
     # check post not removed
@@ -82,7 +79,7 @@ class Post < ActiveRecord::Base
     end
     new_comments
   rescue StandardError => e
-    App.logger.error "Error when getting post #{dcard_id} comments from #{api} #{e.inspect}"
+    Rails.logger.error "Error when getting post #{dcard_id} comments from #{api} #{e.inspect}"
     new_comments
   end
 end

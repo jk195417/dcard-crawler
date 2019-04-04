@@ -1,4 +1,6 @@
-class Comment < ActiveRecord::Base
+class Comment < ApplicationRecord
+  include Dcard::LoadData
+
   belongs_to :post, counter_cache: true
 
   def self.load_from_dcard(data)
@@ -6,8 +8,8 @@ class Comment < ActiveRecord::Base
       dcard_id: data['id'],
       anonymous: data['anonymous'],
       post_dcard_id: data['postId'],
-      created_at: DateTime.parse(data['createdAt']),
-      updated_at: DateTime.parse(data['updatedAt']),
+      created_at: Time.parse(data['createdAt']),
+      updated_at: Time.parse(data['updatedAt']),
       floor: data['floor'],
       content: data['content'],
       like_count: data['likeCount'],
@@ -19,12 +21,7 @@ class Comment < ActiveRecord::Base
       host: data['host'],
       report_reason: data['reportReason'],
       hidden: data['hidden'],
-      in_review: data['inReview'],
+      in_review: data['inReview']
     }
-  end
-
-  def load_from_dcard(data)
-    new_values = self.class.load_from_dcard(data)
-    assign_attributes(new_values)
   end
 end

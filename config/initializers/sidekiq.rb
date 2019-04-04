@@ -1,10 +1,10 @@
+# Setup connection
+url = Rails.application.credentials.redis[:url] || 'redis://127.0.0.1:6379/0'
+
 Sidekiq.configure_server do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
-  config.error_handlers << Proc.new do |exception, context_hash|
-    App.logger.error "#{exception.inspect} #{context_hash}"
-  end
+  config.redis = { url: url }
 end
 
 Sidekiq.configure_client do |config|
-  config.redis = { url: ENV['REDIS_URL'] }
+  config.redis = { url: url }
 end

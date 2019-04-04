@@ -1,0 +1,7 @@
+<div>
+  <%= content_tag :h5, "B#{comment.floor}", id: "floor-#{comment.floor}" %>
+  <div>
+    <%= simple_format comment.content %>
+  </div>
+  <p class="small text-muted"><i class="fas fa-heart"></i> &times; <%= comment.like_count %></p>
+</div>

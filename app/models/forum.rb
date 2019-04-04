@@ -1,4 +1,6 @@
-class Forum < ActiveRecord::Base
+class Forum < ApplicationRecord
+  include Dcard::LoadData
+
   has_many :posts, dependent: :destroy
 
   def self.load_from_dcard(data)
@@ -18,33 +20,26 @@ class Forum < ActiveRecord::Base
       can_use_nickname: data['canUseNickname'],
       should_categorized: data['shouldCategorized'],
       nsfw: data['nsfw'],
-      created_at: DateTime.parse(data['createdAt']),
-      updated_at: DateTime.parse(data['updatedAt'])
+      created_at: Time.parse(data['createdAt']),
+      updated_at: Time.parse(data['updatedAt'])
     }
   end
 
-  def api
-    DcardAPI.forum(self.alias)
-  end
-
-  def load_from_dcard(data)
-    new_values = self.class.load_from_dcard(data)
-    assign_attributes(new_values)
+  def dcard_url
+    'https://www.dcard.tw/f/' + self.alias
   end
 
   def pull_from_dcard
-    load_from_dcard(JSON.parse(HTTP.get(api).to_s))
+    load_from_dcard(JSON.parse(HTTP.get(Dcard::Api.forum(self.alias)).to_s))
   end
 
   def new_posts_from_dcard(recent: false, popular: false)
     new_posts = []
     post_dcard_ids = posts.order(dcard_id: :asc).pluck(:dcard_id)
     api = if recent
-            newest_post_dcard_id = post_dcard_ids.last
-            DcardAPI.forum_posts(self.alias, popular: popular, after: newest_post_dcard_id)
+            Dcard::Api.forum_posts(self.alias, popular: popular, after: post_dcard_ids.last)
           else
-            oldest_post_dcard_id = post_dcard_ids.first
-            DcardAPI.forum_posts(self.alias, popular: popular, before: oldest_post_dcard_id)
+            Dcard::Api.forum_posts(self.alias, popular: popular, before: post_dcard_ids.first)
           end
     body = HTTP.get(api).to_s
     results = JSON.parse(body)
@@ -57,7 +52,7 @@ class Forum < ActiveRecord::Base
     end
     new_posts
   rescue StandardError => e
-    App.logger.error "Error when getting forum #{id} posts from #{api} #{e.inspect}"
+    Rails.logger.error "Error when getting forum #{id} posts from #{api} #{e.inspect}"
     new_posts
   end
 end

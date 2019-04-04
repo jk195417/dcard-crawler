@@ -1,0 +1,25 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  timeout: 5000
+  pool: "<%= ENV.fetch("RAILS_MAX_THREADS") { 25 } %>"
+
+development: &development
+  <<: *default
+  host: localhost
+  database: dcard_crawler_dev
+  username: Xin
+  password: '0417'
+
+test: &test
+  <<: *default
+  host: localhost
+  database: dcard_crawler_test
+  username: Xin
+  password: '0417'
+
+production:
+  <<: *default
+  database: dcard_crawler
+  username: "<%= Rails.application.credentials.database[:username] %>"
+  password: "<%= Rails.application.credentials.database[:password] %>"

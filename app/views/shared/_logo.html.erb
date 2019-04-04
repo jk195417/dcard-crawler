@@ -1,0 +1,12 @@
+<div class="d-flex justify-content-center align-items-center flex-wrap">
+  <h1>
+    <%= link_to root_path do %>
+      <%= image_tag 'logo' %>
+    <% end %>
+  </h1>
+  <% if user_signed_in? %>
+    <%= link_to destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-sign-out-alt"></i> Sign out
+    <% end %>
+  <% end %>
+</div>

@@ -1,0 +1,37 @@
+<%= render 'shared/logo' %>
+<div class="d-flex flex-wrap justify-content-center">
+  <h2>Reviews</h2>
+  <div class="w-100"></div>
+  <p>Yet review <%= current_user.reviews.size %> posts</p>
+  <div class="w-100"></div>
+  <%= link_to 'Start Review Posts', new_review_path, class: 'btn btn-outline-success' %>
+</div>
+<br>
+<div class="container mt-2">
+  <%= paginate @reviews %>
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Forum / Title</th>
+        <th>Echo Chamber</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @reviews.each do |review| %>
+        <tr>
+          <td><%= review.post.forum_name %> / <%= review.post.title %></td>
+          <td><%= review.echo_chamber %></td>
+          <td>
+            <%= link_to review.post.dcard_url, target: :_blank, class: 'btn btn-sm btn-outline-secondary' do %>
+              <i class="fas fa-external-link-alt"></i> Dcard
+            <% end %>
+            <%= link_to edit_review_path(review), class: 'btn btn-sm btn-outline-secondary' do %>
+              <i class="far fa-edit"></i> Edit
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

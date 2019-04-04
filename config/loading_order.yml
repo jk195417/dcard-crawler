@@ -1,6 +1,0 @@
-folders:
-  - config/initializers
-  - lib
-  - app/models
-  - app/actions
-  - app/workers

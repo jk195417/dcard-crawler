@@ -1,0 +1,33 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <table class="table">
+    <thead class="thead-light">
+      <tr>
+        <th>Table</th>
+        <th>Row Count</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Forum</td>
+        <td><%= @forums_count %></td>
+      </tr>
+      <tr>
+        <td>Post</td>
+        <td><%= @posts_count %></td>
+      </tr>
+      <tr>
+        <td>Comment</td>
+        <td><%= @comments_count %></td>
+      </tr>
+      <tr>
+        <td>Review</td>
+        <td><%= @reviews_count %></td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td><%= @users_count %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

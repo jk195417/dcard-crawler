@@ -1,0 +1,20 @@
+<div class="container">
+  <%= render 'admin/shared/header' %>
+  <div class="d-flex mt-2">
+    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <%= link_to admin_reviews_path(post_id: @post.id), class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
+      <i class="far fa-file-alt"></i> Show reviews
+    <% end %>
+    <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl comments
+    <% end %>
+    <%= link_to admin_post_path(@post), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+      <i class="fas fa-trash"></i> Destroy
+    <% end %>
+  </div>
+  <div class="container mt-2">
+    <%= render 'posts/post', post: @post %>
+  </div>
+</div>

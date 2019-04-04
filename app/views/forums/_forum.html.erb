@@ -1,0 +1,7 @@
+<h3>Name : <%= forum.name %></h3>
+<p>Origin Link : <%= link_to forum.dcard_url, forum.dcard_url, target: :_blank %></p>
+<p>Posts count: <%= forum.posts_count %></p>
+<div>
+  <p>Description:</p>
+  <%= simple_format forum.description %>
+</div>

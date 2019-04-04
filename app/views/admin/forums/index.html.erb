@@ -1,0 +1,54 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <div class="d-flex my-2">
+    <%= link_to admin_forums_path, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-list"></i> All forums
+    <% end %>
+    <%= link_to admin_forums_path(is_school: false), class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+      <i class="fas fa-list"></i> Only not school forums
+    <% end %>
+    <%= link_to batch_update_admin_forums_path(ids: @forums.ids), method: :post, class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl posts of this page's forums
+    <% end %>
+    <%= link_to admin_forums_path, method: :post, class: 'btn btn-sm btn-outline-danger ml-1', data: { confirm: 'take some times to exec this job, still want to proceed?' } do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl meta data of all forums
+    <% end %>
+  </div>
+  <div>
+    <%= paginate @forums %>
+    <table class="table mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th>Name</th>
+          <th>Post</th>
+          <th>Link</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @forums.each do |forum| %>
+          <tr>
+            <td><%= forum.name %></td>
+            <td><%= forum.posts_count %></td>
+            <td><%= link_to forum.dcard_url, forum.dcard_url, target: :_blank %></td>
+            <td>
+              <%= link_to admin_forum_path(forum), class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="fas fa-info-circle"></i> Show
+              <% end %>
+              <%= link_to admin_posts_path(forum_id: forum.id), class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="far fa-file-alt"></i> Show posts
+              <% end %>
+              <%= link_to admin_forum_path(forum), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="fas fa-cloud-download-alt"></i> Crawl posts
+              <% end %>
+              <%= link_to admin_forum_path(forum), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+                <i class="fas fa-trash"></i> Destroy
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @forums %>
+  </div>
+</div>

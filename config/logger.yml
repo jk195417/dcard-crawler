@@ -1,6 +1,0 @@
-main:
-  path: 'log/app.log'
-  level: 'info'
-error:
-  path: 'log/error.log'
-  level: 'error'

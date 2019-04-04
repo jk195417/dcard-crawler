@@ -1,0 +1,49 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <div class="d-flex my-2">
+    <div></div>
+    <%= link_to batch_update_admin_posts_path(ids: @posts.ids), method: :post, class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl comments of this page's posts
+    <% end %>
+  </div>
+  <div>
+    <%= paginate @posts %>
+    <table class="table mt-2">
+      <thead class="thead-light">
+        <tr>
+          <th>Forum / Title</th>
+          <th>Comments</th>
+          <th>Reviews</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @posts.each do |post| %>
+          <tr>
+            <td><%= link_to post.forum_name, admin_forum_path(post.forum_id) %> / <%= post.title %></td>
+            <td><%= post.comments_count %> / <%= post.comment_count %></td>
+            <td><%= post.reviews_count %></td>
+            <td>
+              <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="fas fa-info-circle"></i> Show
+              <% end %>
+              <%= link_to post.dcard_url, target: :_blank, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="fas fa-external-link-alt"></i> Dcard
+              <% end %>
+              <%= link_to admin_reviews_path(post_id: post.id), class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="far fa-file-alt"></i> Show reviews
+              <% end %>
+              <%= link_to admin_post_path(post), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+                <i class="fas fa-cloud-download-alt"></i> Crawl comments
+              <% end %>
+              <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+                <i class="fas fa-trash"></i> Destroy
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @posts %>
+  </div>
+</div>
