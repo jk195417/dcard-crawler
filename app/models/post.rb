@@ -7,8 +7,9 @@ class Post < ApplicationRecord
 
   scope :not_removed, -> { where(removed: nil) }
   scope :crawled, -> { where('comment_count = comments_count') }
-  scope :comments_more_then, ->(number) { where('comments_count > ?', number) }
+  scope :comments_more_then, ->(number) { where('comments_count >= ?', number) }
   scope :reviewable, -> { not_removed.crawled.comments_more_then(10) }
+  scope :random, -> { offset(rand(count)) } # need 2 sql query
 
   def self.load_from_dcard(data)
     {

@@ -8,10 +8,8 @@ class ReviewsController < ApplicationController
 
   def new
     reviewd_post_ids = current_user.reviews.pluck(:post_id)
-    # posts = Post.reviewable.where.not(id: reviewd_post_ids)
-    # random_offset = rand(posts.count)
-    # @post = posts.offset(random_offset).first
-    @post = Post.reviewable.where.not(id: reviewd_post_ids).order(reviews_count: :desc).first
+    @post = Post.reviewable.where.not(id: reviewd_post_ids).random.first
+    redirect_to(reviews_path, alert: "No post can be reviewed.") if @post.blank?
     @review = current_user.reviews.build(post: @post)
   end
 
