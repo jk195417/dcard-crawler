@@ -1,12 +1,40 @@
 <%= render 'admin/shared/header' %>
 <div class="container">
+  <div class="card">
+    <div class="card-body">
+      <%= search_form_for [:admin, @q], class: 'form-row align-items-center' do |f| %>
+        <div class="col-auto"><i class="fas fa-search"></i></div>
+        <div class="form-group col-auto">
+          <label>Post title</label>
+          <%= f.search_field :post_title_cont, class: 'form-control' %>
+        </div>
+        <div class="form-group col-auto">
+          <label>Echo chamber</label>
+          <%= f.select :echo_chamber_eq, Review.echo_chambers, { include_blank: true }, { class: 'form-control ml-1' } %>
+        </div>
+        <div class="btn-group col-auto">
+          <%= f.button class: 'btn btn-sm btn-outline-secondary' do %>
+            <i class="fas fa-search"></i>
+          <% end %>
+          <%= link_to admin_reviews_path, class: 'btn btn-sm btn-outline-secondary' do %>
+            <i class="fas fa-undo"></i>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <br>
   <%= paginate @reviews %>
   <table class="table mt-2">
     <thead class="thead-light">
       <tr>
         <th>Forum / Title</th>
         <th>User</th>
-        <th>Echo Chamber</th>
+        <th>
+          <%= sort_link @q, :echo_chamber do %>
+            Echo Chamber
+          <% end %>
+        </th>
         <th></th>
       </tr>
     </thead>

@@ -4,7 +4,7 @@
     <%= link_to :back, class: 'btn btn-sm btn-outline-secondary m-1' do %>
       <i class="fas fa-redo"></i> Back
     <% end %>
-    <%= link_to admin_reviews_path(post_id: @post.id), class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
+    <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
       <i class="far fa-file-alt"></i> Show reviews
     <% end %>
     <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>

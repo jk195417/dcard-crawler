@@ -22,6 +22,7 @@ gem 'jquery-rails' # Jquery 3 for Bootstrap 4
 gem 'simple_form' # Form Builder
 gem 'devise' # User Authentication
 gem 'font-awesome-sass', '~> 5.8.1' # Icon
+gem 'ransack' # ActiveRecord searching
 
 # defalut but useless gem
 # gem 'sqlite3' # Use sqlite3 as the database for Active Record

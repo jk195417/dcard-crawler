@@ -2,12 +2,8 @@ class Admin::PostsController < Admin::BaseController
   before_action :set_post, only: %i[show update destroy]
 
   def index
-    posts = if params[:forum_id]
-              Post.where(forum_id: params[:forum_id])
-            else
-              Post.all
-            end
-    @posts = posts.order(id: :desc).page(params[:page])
+    @q = Post.ransack(params[:q])
+    @posts = @q.result(distinct: true).page(params[:page])
   end
 
   def show; end

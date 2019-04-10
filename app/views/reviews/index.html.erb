@@ -20,12 +20,14 @@
     <tbody>
       <% @reviews.each do |review| %>
         <tr>
-          <td><%= review.post.forum_name %> / <%= review.post.title %></td>
+          <td>
+            <%= review.post.forum_name %> / <%= review.post.title %>
+            <%= link_to review.post.dcard_url, target: :_blank do %>
+              <i class="fas fa-external-link-alt"></i>
+            <% end %>
+          </td>
           <td><%= review.echo_chamber %></td>
           <td>
-            <%= link_to review.post.dcard_url, target: :_blank, class: 'btn btn-sm btn-outline-secondary' do %>
-              <i class="fas fa-external-link-alt"></i> Dcard
-            <% end %>
             <%= link_to edit_review_path(review), class: 'btn btn-sm btn-outline-secondary' do %>
               <i class="far fa-edit"></i> Edit
             <% end %>

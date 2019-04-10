@@ -2,9 +2,8 @@ class Admin::ForumsController < Admin::BaseController
   before_action :set_forum, only: %i[show update destroy]
 
   def index
-    forums = Forum.all
-    forums = forums.where(is_school: false) if params[:is_school] == 'false'
-    @forums = forums.order(id: :asc).page(params[:page])
+    @q = Forum.ransack(params[:q])
+    @forums = @q.result(distinct: true).page(params[:page])
   end
 
   def show; end

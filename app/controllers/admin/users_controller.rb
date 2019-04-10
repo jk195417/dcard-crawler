@@ -2,7 +2,8 @@ class Admin::UsersController < Admin::BaseController
   before_action :set_user, only: [:destroy]
 
   def index
-    @users = User.page(params[:page]).per(10)
+    @q = User.ransack(params[:q])
+    @users = @q.result(distinct: true).page(params[:page])
   end
 
   def destroy
