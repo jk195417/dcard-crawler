@@ -11,6 +11,8 @@ class Post < ApplicationRecord
   scope :reviewable, -> { not_removed.crawled.comments_more_then(10) }
   scope :random, -> { offset(rand(count)) } # need 2 sql query
 
+  validates_uniqueness_of :dcard_id
+
   def self.load_from_dcard(data)
     {
       dcard_id: data['id'],
