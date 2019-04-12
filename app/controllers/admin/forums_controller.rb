@@ -28,7 +28,7 @@ class Admin::ForumsController < Admin::BaseController
 
   def destroy
     @forum.destroy
-    redirect_to admin_posts_url, notice: "Forum #{@forum.name} was successfully destroyed."
+    redirect_to admin_forums_url, notice: "Forum #{@forum.name} was successfully destroyed."
   end
 
   private
