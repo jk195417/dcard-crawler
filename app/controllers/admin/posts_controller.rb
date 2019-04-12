@@ -3,7 +3,7 @@ class Admin::PostsController < Admin::BaseController
 
   def index
     @q = Post.ransack(params[:q])
-    @posts = @q.result(distinct: true).page(params[:page])
+    @posts = @q.result(distinct: true).order(id: :desc).page(params[:page])
   end
 
   def show; end
