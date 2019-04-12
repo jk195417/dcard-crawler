@@ -7,11 +7,12 @@ Rails.application.routes.draw do
     authenticate :user, ->(u) { u.id == 1 } do
       mount Sidekiq::Web => '/sidekiq'
     end
-    get 'statistics' => 'pages#statistics'
+    get 'statistics', 'explore', controller: 'pages'
+
     resources :forums, except: %i[new edit] do
       post :batch_update, on: :collection
     end
-    resources :posts, except: %i[new edit create] do
+    resources :posts, except: %i[new edit] do
       post :batch_update, on: :collection
     end
     resources :reviews, only: %i[index destroy]

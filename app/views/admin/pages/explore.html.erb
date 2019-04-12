@@ -1,0 +1,61 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <%= form_tag admin_explore_path, method: :get do %>
+    <div class="input-group">
+      <%= text_field_tag(:query, params[:query], placeholder: 'Search Keyword', class: 'form-control') %>
+      <%= select_tag :forum, options_from_collection_for_select(Forum.all, :alias, :name, params[:forum]), include_blank: true, class: 'form-control' %>
+      <div class="input-group-append">
+        <%= button_tag class: 'btn btn-primary' do %>
+          <i class="fas fa-search"></i>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+  <br>
+  <div>
+    <table class="table">
+      <thead class="thead-light">
+        <tr>
+          <th>Forum | Title</th>
+          <th>Comments & Likes</th>
+          <th>
+            <div id="crawl-posts-btn" class="btn btn-sm btn-outline-secondary">
+              <i class="fas fa-cloud-download-alt"></i> Crawl all
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @posts.each do |post| %>
+          <tr>
+            <td>
+              <%= post.forum_name %> |
+              <%= post.title %>
+              <%= link_to post.dcard_url, target: :_blank do %>
+                <i class="fas fa-external-link-alt"></i>
+              <% end %>
+            </td>
+            <td>
+              <i class="far fa-comments"></i> <%= post.comment_count %>
+              <i class="ml-2 far fa-heart"></i> <%= post.like_count %>
+            </td>
+            <td>
+              <%= link_to admin_posts_path(post: post.as_json), method: :post, remote: true, class: 'btn btn-sm btn-outline-primary', id: "crawl-post-#{post.dcard_id}-btn" do %>
+                <i class="fas fa-cloud-download-alt"></i> Crawl
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<script type="text/javascript">
+  <% @exist_posts.each do |post| %>
+  $('#crawl-post-<%= post.dcard_id %>-btn').addClass('disabled').text('Crawled')
+  <% end %>
+  
+  $('#crawl-posts-btn').click(function () {
+    $('a[id^="crawl-post-"][id$="-btn"]').not('.disabled').toArray().forEach(btn => btn.click())
+  })
+</script>
