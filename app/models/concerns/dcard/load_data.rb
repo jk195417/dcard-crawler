@@ -4,5 +4,6 @@ module Dcard::LoadData
   def load_from_dcard(data)
     new_values = self.class.load_from_dcard(data)
     assign_attributes(new_values)
+    self
   end
 end
