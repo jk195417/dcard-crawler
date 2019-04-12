@@ -1,12 +1,14 @@
-<div class="d-flex justify-content-center align-items-center flex-wrap">
+<div class="text-center my-4">
   <h1>
-    <%= link_to root_path do %>
-      <%= image_tag 'logo' %>
+    <%= link_to root_path, class: 'text-decoration-none text-dark' do %>
+      <%= image_tag 'logo', height: '100px'%>
+    <% end %>
+    <% if user_signed_in? %>
+      <span>
+        <%= link_to destroy_user_session_path, method: :delete, class: 'ml-4 btn btn-sm btn-outline-secondary' do %>
+          <i class="fas fa-sign-out-alt"></i> Sign out
+        <% end %>
+      </span>
     <% end %>
   </h1>
-  <% if user_signed_in? %>
-    <%= link_to destroy_user_session_path, method: :delete, class: 'btn btn-sm btn-outline-secondary' do %>
-      <i class="fas fa-sign-out-alt"></i> Sign out
-    <% end %>
-  <% end %>
 </div>
