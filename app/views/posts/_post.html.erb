@@ -1,18 +1,46 @@
-<h3>Title : <%= post.title %></h3>
-<p>Forum : <%= post.forum_name %></p>
-<p>Origin Link : <%= link_to post.dcard_url, post.dcard_url, target: :_blank %></p>
-<hr>
-<div>
-  <h5 id="floor-0">B0 :</h5>
-  <div>
-    <%= simple_format post.content %>
+<% post_class = 'male' if post.gender == 'M' %>
+<% post_class = 'female' if post.gender == 'F' %>
+<% comments ||= post.comments.order(:floor) %>
+<div id="floor-0" class="<%= post_class %> card my-1">
+  <div class="card-body">
+    <div class="card-title">
+      <h3><%= post.title %></h3>
+      <p class="text-muted">
+        <%= post.forum_name %>
+        <%= link_to post.dcard_url, target: :_blank do %>
+          <i class="fas fa-external-link-alt"></i>
+        <% end %>
+      </p>
+    </div>
+    <div class="card-title">
+      <h5><%= post.school %> <%= post.department %></h5>
+      <p class="text-muted">
+        B0
+        <%= time_formatter post.created_at %>
+      </p>
+    </div>
+    <div class="card-text">
+      <%= url_to_img(simple_format(post.content)) %>
+    </div>
+    <div class="card-text small text-muted">
+      <i class="fas fa-heart" style="color: rgb(254,69,78)"></i>
+      <i class="fas fa-times"></i>
+      <%= post.like_count %>
+    </div>
   </div>
-  <p class="small text-muted"><i class="fas fa-heart"></i> &times; <%= post.like_count %></p>
-  <hr>
 </div>
-<% post.comments.order(:floor).each do |comment| %>
-  <div>
-    <%= render 'comments/comment', comment: comment %>
-    <hr>
-  </div>
-<% end %>
+<%= render partial: 'comments/comment', collection: comments, as: :comment %>
+<style type="text/css">
+  .male {
+    background: rgba(102,212,253,0.4);
+  }
+  .female {
+    background: rgba(255,129,173,0.4);
+  }
+  .removed {
+    background: rgba(25,25,25,0.4);
+  }
+  img {
+    max-height: 200px;
+  }
+</style>

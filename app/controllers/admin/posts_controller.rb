@@ -6,7 +6,9 @@ class Admin::PostsController < Admin::BaseController
     @posts = @q.result(distinct: true).order(id: :desc).page(params[:page])
   end
 
-  def show; end
+  def show
+    @comments = @post.comments.order(floor: :asc).page(params[:page])
+  end
 
   def create
     forum = Forum.find_by!(name: post_params[:forum_name])

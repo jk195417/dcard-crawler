@@ -1,5 +1,5 @@
+<%= render 'admin/shared/header' %>
 <div class="container">
-  <%= render 'admin/shared/header' %>
   <div class="d-flex mt-2">
     <%= link_to :back, class: 'btn btn-sm btn-outline-secondary m-1' do %>
       <i class="fas fa-redo"></i> Back
@@ -15,6 +15,8 @@
     <% end %>
   </div>
   <div class="container mt-2">
-    <%= render 'posts/post', post: @post %>
+    <%= paginate @comments %>
+    <%= render 'posts/post', post: @post, comments: @comments %>
+    <%= paginate @comments %>
   </div>
 </div>
