@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 # https://github.com/hanxiao/bert-as-service#using-bert-as-service-to-serve-http-requests-in-json
 # Usage:
-# bc = Bert::Client.new
-# bc.encode(uniq_key, texts_array)
-class Bert::Client
+# bc = Bert::Service.new
+# bc.perform(uniq_key, texts_array)
+
+class Bert::Service
   attr_accessor :host
 
   def initialize(host: nil)
@@ -10,10 +13,10 @@ class Bert::Client
   end
 
   # texts = [text1, text2...], texts.size need to <= 256
-  def encode(id, texts, is_tokenized: false)
+  def perform(id, texts, is_tokenized: false)
     params = { id: id, texts: texts, is_tokenized: is_tokenized }
     response = HTTP.post("#{@host}/encode", json: params)
     embeddings = JSON.parse(response.to_s)['result']
-    return embeddings
+    embeddings
   end
 end

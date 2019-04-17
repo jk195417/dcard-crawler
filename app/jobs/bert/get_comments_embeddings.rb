@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Bert::GetCommentsEmbeddings < ApplicationJob
   queue_as :default
 
@@ -13,8 +15,7 @@ class Bert::GetCommentsEmbeddings < ApplicationJob
     end
 
     # get comments embeddings
-    bc = Bert::Client.new
-    embeddings = bc.encode(first_comment_id, comment_contents)
+    embeddings = Bert::Service.new.perform(first_comment_id, comment_contents)
     data = comment_ids.map.with_index { |id, index| { id: id, embedding: embeddings[index] } }
 
     # bulk update comments at one sql, like a upsert.
