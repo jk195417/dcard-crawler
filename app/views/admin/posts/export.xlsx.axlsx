@@ -1,0 +1,7 @@
+wb = xlsx_package.workbook
+wb.add_worksheet do |sheet|
+  sheet.add_row ['index', 'content']
+  @segmentation.each.with_index do |words, index|
+    sheet.add_row [index, words.join(' ').gsub(/\n /, "\n")]
+  end
+end

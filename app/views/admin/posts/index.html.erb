@@ -89,7 +89,7 @@
             <td><%= post.comments_count %> / <%= post.comment_count %></td>
             <td><%= post.reviews_count %></td>
             <td class="btn-toolbar">
-              <div class="btn-group mr-1">
+              <div class="btn-group mr-1 my-1">
                 <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-info-circle"></i> Show
                 <% end %>
@@ -97,12 +97,27 @@
                   <i class="far fa-file-alt"></i> Show reviews
                 <% end %>
               </div>
-              <div class="btn-group mr-1">
+              <div class="btn-group mr-1 my-1">
                 <%= link_to admin_post_path(post), method: :patch, class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-cloud-download-alt"></i> Crawl comments
                 <% end %>
               </div>
-              <div class="btn-group">
+              <div class="btn-group mr-1 my-1">
+                <div class="dropdown">
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+                    <i class="fas fa-cloud-download-alt"></i> Save Segmentation
+                  </button>
+                  <div class="dropdown-menu">
+                    <%= link_to 'jieba .txt', export_admin_post_path(post, method: 'jieba', format: :text), class: 'dropdown-item' %>
+                    <%= link_to 'snownlp .txt', export_admin_post_path(post, method: 'snownlp', format: :text), class: 'dropdown-item' %>
+                    <%= link_to 'pkuseg .txt', export_admin_post_path(post, method: 'pkuseg', format: :text), class: 'dropdown-item' %>
+                    <%= link_to 'jieba .xlsx', export_admin_post_path(post, method: 'jieba', format: :xlsx), class: 'dropdown-item' %>
+                    <%= link_to 'snownlp .xlsx', export_admin_post_path(post, method: 'snownlp', format: :xlsx), class: 'dropdown-item' %>
+                    <%= link_to 'pkuseg .xlsx', export_admin_post_path(post, method: 'pkuseg', format: :xlsx), class: 'dropdown-item' %>
+                  </div>
+                </div>
+              </div>
+              <div class="btn-group my-1">
                 <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' } do %>
                   <i class="fas fa-trash"></i> Destroy
                 <% end %>

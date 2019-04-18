@@ -23,6 +23,9 @@ gem 'simple_form' # Form Builder
 gem 'devise' # User Authentication
 gem 'font-awesome-sass', '~> 5.8.1' # Icon
 gem 'ransack' # ActiveRecord searching
+gem 'rubyzip', '>= 1.2.1' # Zip file
+gem 'axlsx', git: 'https://github.com/randym/axlsx.git', ref: 'c8ac844' # Create excel file
+gem 'axlsx_rails' # Render .xlsx
 
 # defalut but useless gem
 # gem 'sqlite3' # Use sqlite3 as the database for Active Record

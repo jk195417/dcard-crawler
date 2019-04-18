@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update destroy]
+  before_action :set_post, only: %i[show update export destroy]
 
   def index
     @q = Post.ransack(params[:q])
@@ -43,6 +45,19 @@ class Admin::PostsController < Admin::BaseController
   def destroy
     @post.destroy
     redirect_to admin_posts_url, notice: 'Post was successfully destroyed.'
+  end
+
+  def export
+    text = [@post.content]
+    @post.comments.order(floor: :asc).each do |comment|
+      text << comment.content if comment.content.present?
+    end
+    method = params.fetch(:method, 'jieba')
+    @segmentation = Segmentation::Service.new.perform(text, method)
+    respond_to do |format|
+      format.text { response.headers['Content-Disposition'] = "attachment; filename=\"dcard-#{@post.dcard_id}-#{method}-segmentation.txt\"" }
+      format.xlsx { render xlsx: 'export', filename: "dcard-#{@post.dcard_id}-#{method}-segmentation.xlsx" }
+    end
   end
 
   private

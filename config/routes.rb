@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   root 'pages#index'
   devise_for :users
@@ -14,6 +16,7 @@ Rails.application.routes.draw do
     end
     resources :posts, except: %i[new edit] do
       post :batch_update, on: :collection
+      get :export, on: :member
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]
