@@ -1,6 +1,6 @@
 學術用途，爬取 Dcard 上的文章與留言做數據分析。
 
-# Setup
+## Setup
 
 參考 <https://github.com/jk195417/dcard-crawler/wiki#建立實驗環境>
 
@@ -22,9 +22,14 @@ create Postgres database
 $ rails db:setup
 ```
 
-# Usage
+### Setup Text analysis services (optional)
 
-rake tasks
+- Word embeddings https://github.com/jk195417/bert-as-service-starter
+- Chinese segmentation https://github.com/jk195417/chinese-segmentation-as-service
+
+## Usage
+
+Rake tasks
 
 ```sh
 $ rails dcard:get_forums
@@ -32,14 +37,14 @@ $ rails dcard:get_posts
 $ rails dcard:get_comments
 $ rails remove:useless_comments
 $ rails remove:useless_posts
-$ rails sidekiq:start
 $ rails bert:get_comments_embeddings
 ```
 
-sidekiq
+Sidekiq
 
 ```sh
-$ rails bert:get_comments_embeddings
+$ rails sidekiq:start
+
 # or
 $ sidekiq -C ./config/sidekiq.yml
 ```
