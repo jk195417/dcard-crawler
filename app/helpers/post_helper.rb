@@ -19,7 +19,7 @@ module PostHelper
           label: 'B0',
           x: 0,
           y: 0,
-          size: 5 + post.mentions.size,
+          size: Math.log(post.content&.size || 1) + 1,
           color: gender_color(post.gender)
         }
       ],
@@ -31,7 +31,7 @@ module PostHelper
         label: "B#{comment.floor}",
         x: rand(-100..100),
         y: rand(-20..20),
-        size: 1 + comment.mentions.size,
+        size: Math.log(comment.content&.size || 1) + 1,
         color: gender_color(comment.gender)
       }
       if comment.mentions.empty?
@@ -42,18 +42,14 @@ module PostHelper
         }
       else
         comment.mentions.each.with_index do |mention, index|
+          node_index = result[:nodes].index { |node| node[:id] == mention }
+          next unless node_index
           result[:edges] << {
             id: "B#{comment.floor}[#{index}]_to_#{mention}",
             source: "B#{comment.floor}",
             target: mention
           }
         end
-      end
-    end
-    comments.each do |comment|
-      comment.mentions.each.with_index do |mention, _index|
-        node_index = result[:nodes].index { |node| node[:id] == mention }
-        result[:nodes][node_index][:size] += 1
       end
     end
     result
