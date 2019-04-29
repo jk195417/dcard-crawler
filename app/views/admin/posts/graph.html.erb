@@ -15,7 +15,7 @@
 <style>
   #graph {
     width: 100%;
-    height: 400px;
+    height: 600px;
   }
 </style>
 <script>
@@ -23,7 +23,7 @@
   var s = new sigma('graph')
   
   function forceAtlas(time) {
-    s.startForceAtlas2()
+    s.startForceAtlas2({scalingRatio: Math.log10(s.graph.nodes().length), linLogMode: true})
     setTimeout(() => {
       s.stopForceAtlas2()
     }, time);
