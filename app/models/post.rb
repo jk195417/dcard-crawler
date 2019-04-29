@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Post < ApplicationRecord
   include Dcard::LoadData
 
@@ -84,5 +86,12 @@ class Post < ApplicationRecord
   rescue StandardError => e
     Rails.logger.error "Error when getting post #{dcard_id} comments from #{api} #{e.inspect}"
     new_comments
+  end
+
+  def mentions
+    # result = []
+    # content&.scan(/B\d+/) { |floor_with_B| result << floor_with_B[1..-1].to_i }
+    # result
+    content&.scan(/B\d+/) || []
   end
 end

@@ -1,0 +1,39 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <div class="d-flex mt-2">
+    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <div class="btn btn-sm btn-outline-primary ml-auto" id="force-atlas">
+      <i class="fas fa-random"></i></i> Force Atlas
+  </div>
+</div>
+<div class="d-flex justify-content-center mt-2">
+  <div id="graph"></div>
+</div>
+</div>
+<style>
+  #graph {
+    width: 100%;
+    height: 400px;
+  }
+</style>
+<script>
+  var data = <%= sanitize sigmajs_data_formater(@post, @comments).to_json %>
+  var s = new sigma('graph')
+  
+  function forceAtlas(time) {
+    s.startForceAtlas2()
+    setTimeout(() => {
+      s.stopForceAtlas2()
+    }, time);
+  }
+  
+  var forceAtlasBtn = document.getElementById('force-atlas')
+  forceAtlasBtn.addEventListener('click', () => forceAtlas(100))
+  
+  s.settings({ defaultNodeColor: '#ec5148' })
+  s.graph.read(data)
+  s.refresh()
+  forceAtlas(100)
+</script>

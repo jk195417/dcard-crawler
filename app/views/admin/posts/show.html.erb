@@ -4,9 +4,27 @@
     <%= link_to :back, class: 'btn btn-sm btn-outline-secondary m-1' do %>
       <i class="fas fa-redo"></i> Back
     <% end %>
-    <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
+    <%= link_to graph_admin_post_path, class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
+      <i class="fas fa-project-diagram"></i> Show @ graph
+    <% end %>
+    <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary m-1' do %>
       <i class="far fa-file-alt"></i> Show reviews
     <% end %>
+    <div class="btn-group m-1">
+      <div class="dropdown">
+        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+          <i class="fas fa-cloud-download-alt"></i> Save Segmentation
+        </button>
+        <div class="dropdown-menu">
+          <%= link_to 'jieba .txt', export_admin_post_path(@post, method: 'jieba', format: :text), class: 'dropdown-item' %>
+          <%= link_to 'snownlp .txt', export_admin_post_path(@post, method: 'snownlp', format: :text), class: 'dropdown-item' %>
+          <%= link_to 'pkuseg .txt', export_admin_post_path(@post, method: 'pkuseg', format: :text), class: 'dropdown-item' %>
+          <%= link_to 'jieba .xlsx', export_admin_post_path(@post, method: 'jieba', format: :xlsx), class: 'dropdown-item' %>
+          <%= link_to 'snownlp .xlsx', export_admin_post_path(@post, method: 'snownlp', format: :xlsx), class: 'dropdown-item' %>
+          <%= link_to 'pkuseg .xlsx', export_admin_post_path(@post, method: 'pkuseg', format: :xlsx), class: 'dropdown-item' %>
+        </div>
+      </div>
+    </div>
     <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>
       <i class="fas fa-cloud-download-alt"></i> Crawl comments
     <% end %>

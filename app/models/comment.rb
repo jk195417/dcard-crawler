@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Comment < ApplicationRecord
   include Dcard::LoadData
 
@@ -23,5 +25,12 @@ class Comment < ApplicationRecord
       hidden: data['hidden'],
       in_review: data['inReview']
     }
+  end
+
+  def mentions
+    # result = []
+    # content&.scan(/B\d+/) { |floor_with_B| result << floor_with_B[1..-1].to_i }
+    # result
+    content&.scan(/B\d+/) || []
   end
 end

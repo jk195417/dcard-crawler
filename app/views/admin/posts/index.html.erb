@@ -93,6 +93,9 @@
                 <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-info-circle"></i> Show
                 <% end %>
+                <%= link_to graph_admin_post_path(post), class: 'btn btn-sm btn-outline-secondary' do %>
+                  <i class="fas fa-project-diagram"></i> Show @ graph
+                <% end %>
                 <%= link_to admin_reviews_path(q: { post_id_eq: post.id }), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="far fa-file-alt"></i> Show reviews
                 <% end %>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update export destroy]
+  before_action :set_post, only: %i[show update export graph destroy]
 
   def index
     @q = Post.ransack(params[:q])
@@ -58,6 +58,10 @@ class Admin::PostsController < Admin::BaseController
       format.text { response.headers['Content-Disposition'] = "attachment; filename=\"dcard-#{@post.dcard_id}-#{method}-segmentation.txt\"" }
       format.xlsx { render xlsx: 'export', filename: "dcard-#{@post.dcard_id}-#{method}-segmentation.xlsx" }
     end
+  end
+
+  def graph
+    @comments = @post.comments.order(floor: :asc)
   end
 
   private

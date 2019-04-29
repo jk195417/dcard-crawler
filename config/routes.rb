@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :posts, except: %i[new edit] do
       post :batch_update, on: :collection
       get :export, on: :member
+      get :graph, on: :member
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]
