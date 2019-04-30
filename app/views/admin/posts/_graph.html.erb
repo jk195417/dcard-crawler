@@ -1,0 +1,54 @@
+<div class="container">
+  <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
+    <i class="fas fa-redo"></i> Back
+  <% end %>
+  <div class="row mt-2">
+    <div class="col-12 col-md-6">
+      <div id="graph-container">
+        <div id="graph"></div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6">
+      <div id="detail"></div>
+    </div>
+  </div>
+</div>
+<br>
+<script>
+  var data = <%= sanitize force_graph_data_formater(post, comments).to_json %>
+  var detail = document.getElementById('detail')
+  var container = document.getElementById('graph-container')
+  var graph = document.getElementById('graph')
+  
+  function adjustGraphSize(graph) {
+    graph.width(container.clientWidth).height(window.innerHeight - 100)
+  }
+  
+  function removeChildren(dom) {
+    while (dom.firstChild) { dom.removeChild(dom.firstChild) }
+  }
+  
+  function setupGraph(graph, dom, data) {
+    graph(dom)
+      .graphData(data)
+      .backgroundColor('#f8f9fa')
+      .dagMode('bu')
+      .dagLevelDistance(Math.log(data.nodes.length) * 10)
+      .nodeVal('val_like')
+      .onNodeClick((node) => {
+        removeChildren(detail)
+        detail.insertAdjacentHTML('afterbegin', node.html);
+      })
+    adjustGraphSize(graph)
+  
+    window.addEventListener('resize', () => {
+      adjustGraphSize(graph)
+    })
+  }
+</script>
+<style>
+  img {
+    max-width: 100%;
+    max-height: 200px;
+  }
+</style>

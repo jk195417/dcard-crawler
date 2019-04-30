@@ -2,6 +2,7 @@
   "name": "dcard_crawler",
   "private": true,
   "dependencies": {
-    "sigma": "^1.2.1"
+    "3d-force-graph": "^1.45.7",
+    "force-graph": "^1.14.5"
   }
 }

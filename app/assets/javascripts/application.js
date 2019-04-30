@@ -16,6 +16,6 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
-//= require sigma/build/sigma.require.js
-//= require sigma/build/plugins/sigma.layout.forceAtlas2.min.js
+//= require 3d-force-graph/dist/3d-force-graph.min.js
+//= require force-graph/dist/force-graph.min.js
 //= require_tree .

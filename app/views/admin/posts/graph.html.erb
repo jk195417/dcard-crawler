@@ -1,32 +1,6 @@
 <%= render 'admin/shared/header' %>
-<div class="container">
-  <div class="d-flex mt-2">
-    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
-      <i class="fas fa-redo"></i> Back
-    <% end %>
-    <div class="btn btn-sm btn-outline-primary ml-auto" id="force-atlas">
-      <i class="fas fa-random"></i> Force Atlas
-    </div>
-  </div>
-  <div class="d-flex justify-content-center mt-2">
-    <div id="graph" class="bg-light card"></div>
-  </div>
-</div>
-<br>
-<style>
-  #graph {
-    width: 100%;
-    height: 600px;
-  }
-</style>
+<%= render 'graph', post: @post, comments: @comments %>
 <script>
-  var data = <%= sanitize sigmajs_data_formater(@post, @comments).to_json %>
-  var s = new sigma('graph')
-  var forceAtlasBtn = document.getElementById('force-atlas')
-  forceAtlasBtn.addEventListener('mouseover', () => s.startForceAtlas2({scalingRatio: Math.log10(s.graph.nodes().length), linLogMode: true}))
-  forceAtlasBtn.addEventListener('mouseout', () => s.stopForceAtlas2())
-  
-  s.settings({ defaultNodeColor: '#ec5148' })
-  s.graph.read(data)
-  s.refresh()
+  var Graph = ForceGraph()
+  setupGraph(Graph, graph, data)
 </script>
