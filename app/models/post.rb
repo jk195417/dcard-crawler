@@ -94,4 +94,8 @@ class Post < ApplicationRecord
     # result
     content&.scan(/B\d+/) || []
   end
+
+  def floor
+    0
+  end
 end
