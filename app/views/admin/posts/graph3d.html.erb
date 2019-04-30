@@ -1,0 +1,7 @@
+<%= render 'admin/shared/header' %>
+<%= render 'graph', post: @post, comments: @comments %>
+<script>
+  var Graph = ForceGraph3D()
+  setupGraph(Graph, graph, data)
+  Graph.dagMode('zin')
+</script>

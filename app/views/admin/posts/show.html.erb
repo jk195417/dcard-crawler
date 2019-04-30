@@ -1,38 +1,42 @@
 <%= render 'admin/shared/header' %>
 <div class="container">
-  <div class="d-flex mt-2">
-    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary m-1' do %>
+  <div class="btn-toolbar mt-2">
+    <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
       <i class="fas fa-redo"></i> Back
     <% end %>
-    <%= link_to graph_admin_post_path, class: 'btn btn-sm btn-outline-secondary m-1 ml-auto' do %>
-      <i class="fas fa-project-diagram"></i> Show @ graph
+    <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
+      <i class="far fa-file-alt"></i> Reviews
     <% end %>
-    <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary m-1' do %>
-      <i class="far fa-file-alt"></i> Show reviews
-    <% end %>
-    <div class="btn-group m-1">
-      <div class="dropdown">
-        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
-          <i class="fas fa-cloud-download-alt"></i> Save Segmentation
-        </button>
-        <div class="dropdown-menu">
-          <%= link_to 'jieba .txt', export_admin_post_path(@post, method: 'jieba', format: :text), class: 'dropdown-item' %>
-          <%= link_to 'snownlp .txt', export_admin_post_path(@post, method: 'snownlp', format: :text), class: 'dropdown-item' %>
-          <%= link_to 'pkuseg .txt', export_admin_post_path(@post, method: 'pkuseg', format: :text), class: 'dropdown-item' %>
-          <%= link_to 'jieba .xlsx', export_admin_post_path(@post, method: 'jieba', format: :xlsx), class: 'dropdown-item' %>
-          <%= link_to 'snownlp .xlsx', export_admin_post_path(@post, method: 'snownlp', format: :xlsx), class: 'dropdown-item' %>
-          <%= link_to 'pkuseg .xlsx', export_admin_post_path(@post, method: 'pkuseg', format: :xlsx), class: 'dropdown-item' %>
-        </div>
+    <div class="dropdown ml-1">
+      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fas fa-project-diagram"></i> @ Graph
+      </button>
+      <div class="dropdown-menu">
+        <%= link_to '2D' ,graph_admin_post_path(@post), class: 'dropdown-item'%>
+        <%= link_to '3D' ,graph3d_admin_post_path(@post), class: 'dropdown-item'%>
       </div>
     </div>
-    <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary m-1' do %>
-      <i class="fas fa-cloud-download-alt"></i> Crawl comments
+    <div class="dropdown ml-1">
+      <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown">
+        <i class="fas fa-cloud-download-alt"></i> Segmentation
+      </button>
+      <div class="dropdown-menu">
+        <%= link_to 'jieba .txt', export_admin_post_path(@post, method: 'jieba', format: :text), class: 'dropdown-item' %>
+        <%= link_to 'snownlp .txt', export_admin_post_path(@post, method: 'snownlp', format: :text), class: 'dropdown-item' %>
+        <%= link_to 'pkuseg .txt', export_admin_post_path(@post, method: 'pkuseg', format: :text), class: 'dropdown-item' %>
+        <%= link_to 'jieba .xlsx', export_admin_post_path(@post, method: 'jieba', format: :xlsx), class: 'dropdown-item' %>
+        <%= link_to 'snownlp .xlsx', export_admin_post_path(@post, method: 'snownlp', format: :xlsx), class: 'dropdown-item' %>
+        <%= link_to 'pkuseg .xlsx', export_admin_post_path(@post, method: 'pkuseg', format: :xlsx), class: 'dropdown-item' %>
+      </div>
+    </div>
+    <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+      <i class="fas fa-cloud-download-alt"></i> Crawl
     <% end %>
-    <%= link_to admin_post_path(@post), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
-      <i class="fas fa-trash"></i> Destroy
+    <%= link_to admin_post_path(@post), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+      <i class="fas fa-trash"></i>
     <% end %>
   </div>
-  <div class="container mt-2">
+  <div class="mt-2">
     <%= paginate @comments %>
     <%= render 'posts/post', post: @post, comments: @comments %>
     <%= paginate @comments %>

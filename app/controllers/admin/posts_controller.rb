@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update export graph destroy]
+  before_action :set_post, only: %i[show update export graph graph3d destroy]
 
   def index
     @q = Post.ransack(params[:q])
@@ -61,6 +61,10 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def graph
+    @comments = @post.comments.order(floor: :asc)
+  end
+
+  def graph3d
     @comments = @post.comments.order(floor: :asc)
   end
 

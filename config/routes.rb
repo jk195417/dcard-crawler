@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post :batch_update, on: :collection
       get :export, on: :member
       get :graph, on: :member
+      get :graph3d, on: :member
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]
