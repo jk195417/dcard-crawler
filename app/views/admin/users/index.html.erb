@@ -39,13 +39,12 @@
         <tr>
           <td><%= user.id %></td>
           <td><%= user.email %></td>
-          <td><%= user.reviews_count %></td>
           <td>
-            <%= link_to admin_reviews_path(q: { user_id_eq: user.id }), class: 'btn btn-sm btn-outline-secondary m-1' do %>
-              <i class="far fa-file-alt"></i> Show reviews
-            <% end %>
-            <%= link_to admin_user_path(user), class: 'btn btn-sm btn-outline-danger m-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
-              <i class="fas fa-trash"></i> Destroy
+            <%= link_to user.reviews_count, admin_reviews_path(q: { user_id_eq: user.id }) %>
+          </td>
+          <td>
+            <%= link_to admin_user_path(user), class: 'btn btn-sm btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' } do %>
+              <i class="fas fa-trash"></i>
             <% end %>
           </td>
         </tr>
