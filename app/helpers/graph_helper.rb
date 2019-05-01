@@ -10,7 +10,7 @@ module GraphHelper
       "rgba(25,25,25,#{opacity})"
     end
   end
-  
+
   def node_html(post_or_comment)
     "<div id=\"floor-#{post_or_comment.floor}\"
           class=\"card\"
@@ -60,7 +60,8 @@ module GraphHelper
       if comment.mentions.empty?
         result[:links] << {
           source: "B#{comment.floor}",
-          target: 'B0'
+          target: 'B0',
+          color: '#343a40'
         }
       else
         comment.mentions.each do |mention|
@@ -69,7 +70,8 @@ module GraphHelper
 
           result[:links] << {
             source: "B#{comment.floor}",
-            target: mention
+            target: mention,
+            color: '#343a40'
           }
         end
       end
