@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_26_015303) do
+ActiveRecord::Schema.define(version: 2019_05_02_121434) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,18 @@ ActiveRecord::Schema.define(version: 2019_03_26_015303) do
     t.index ["alias"], name: "index_forums_on_alias", unique: true
     t.index ["dcard_id"], name: "index_forums_on_dcard_id", unique: true
     t.index ["name"], name: "index_forums_on_name", unique: true
+  end
+
+  create_table "opinion_words", force: :cascade do |t|
+    t.string "word"
+    t.float "score", default: 0.0
+    t.integer "positive", default: 0
+    t.integer "neutral", default: 0
+    t.integer "negative", default: 0
+    t.integer "non_opinionated", default: 0
+    t.integer "not_a_word", default: 0
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "posts", force: :cascade do |t|

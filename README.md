@@ -22,7 +22,13 @@ create Postgres database
 $ rails db:setup
 ```
 
-### Setup Text analysis services (optional)
+Load opinion words from ANTUSD dic: `lib/ANTUSD/opinion_words.csv`
+
+```bash
+$ rails antusd:load
+```
+
+### Setup text analysis services (optional)
 
 - Word embeddings https://github.com/jk195417/bert-as-service-starter
 - Chinese segmentation https://github.com/jk195417/chinese-segmentation-as-service
@@ -37,7 +43,8 @@ $ rails dcard:get_posts
 $ rails dcard:get_comments
 $ rails remove:useless_comments
 $ rails remove:useless_posts
-$ rails bert:get_comments_embeddings
+$ rails antusd:reload
+$ rails bert:get_comments_embeddings # require https://github.com/jk195417/bert-as-service-starter
 ```
 
 Sidekiq
