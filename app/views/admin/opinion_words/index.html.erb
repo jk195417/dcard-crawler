@@ -1,0 +1,84 @@
+<%= render 'admin/shared/header' %>
+<div class="container">
+  <div class="card">
+    <div class="card-body">
+      <%= search_form_for [:admin, @q], class: 'form-row align-items-center' do |f| %>
+        <div class="col-auto"><i class="fas fa-search"></i></div>
+        <div class="form-group col-auto">
+          <label>Word</label>
+          <%= f.search_field :word_cont, class: 'form-control ml-1' %>
+        </div>
+        <div class="btn-group col-auto">
+          <%= f.button class: 'btn btn-sm btn-outline-secondary' do %>
+            <i class="fas fa-search"></i>
+          <% end %>
+          <%= link_to admin_opinion_words_path, class: 'btn btn-sm btn-outline-secondary' do %>
+            <i class="fas fa-undo"></i>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+  <br>
+  <%= paginate @opinion_words %>
+  <table class="table mt-2">
+    <thead class="thead-light">
+      <tr>
+        <th>Word</th>
+        <th>
+          <%= sort_link @q, :score do %>
+            Score
+          <% end %>
+        </th>
+        <th>
+          <%= sort_link @q, :positive do %>
+            Positive
+          <% end %>
+        </th>
+        <th>
+          <%= sort_link @q, :neutral do %>
+            Neutral
+          <% end %>
+        </th>
+        <th>
+          <%= sort_link @q, :negative do %>
+            Negative
+          <% end %>
+        </th>
+        <th>
+          <%= sort_link @q, :non_opinionated do %>
+            Non opinionated
+          <% end %>
+        </th>
+        <th>
+          <%= sort_link @q, :not_a_word do %>
+            Not a word
+          <% end %>
+        </th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @opinion_words.each do |opinion_word| %>
+        <tr>
+          <td><%= opinion_word.word %></td>
+          <td><%= opinion_word.score %></td>
+          <td><%= opinion_word.positive %></td>
+          <td><%= opinion_word.neutral %></td>
+          <td><%= opinion_word.negative %></td>
+          <td><%= opinion_word.non_opinionated %></td>
+          <td><%= opinion_word.not_a_word %></td>
+          <td>
+            <%= link_to admin_opinion_word_path(opinion_word),
+               class: 'btn btn-sm btn-outline-danger m-1',
+               method: :delete,
+               data: { confirm: 'Are you sure?' } do %>
+              <i class="fas fa-trash"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= paginate @opinion_words %>
+</div>

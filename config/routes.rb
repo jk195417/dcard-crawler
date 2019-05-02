@@ -22,6 +22,7 @@ Rails.application.routes.draw do
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]
+    resources :opinion_words, only: %i[index destroy]
   end
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
