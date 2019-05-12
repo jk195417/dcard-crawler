@@ -18,7 +18,7 @@ module GraphHelper
       <div class=\"card-body\">
         <div class=\"card-title\">
           <h5>#{post_or_comment.school} #{post_or_comment.department}</h5>
-          <p class=\"text-muted\">B0 #{time_formatter(post_or_comment.created_at)}</p>
+          <p class=\"text-muted\">B#{post_or_comment.floor} #{time_formatter(post_or_comment.created_at)}</p>
         </div>
         <div class=\"card-text\">
           #{url_to_img(simple_format(post_or_comment.content))}
@@ -57,6 +57,8 @@ module GraphHelper
         color: gender_color(comment.gender),
         html: node_html(comment)
       }
+    end
+    comments.each do |comment|
       if comment.mentions.empty?
         result[:links] << {
           source: "B#{comment.floor}",
