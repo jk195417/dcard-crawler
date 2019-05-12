@@ -1,9 +1,12 @@
-# frozen_string_literal: true
-
 # https://github.com/hanxiao/bert-as-service#using-bert-as-service-to-serve-http-requests-in-json
+#
 # Usage:
+#
 # bc = Bert::Service.new
 # bc.perform(uniq_key, texts_array)
+#
+# Return an Array:
+# [0.123124, -0.98872123, ...]
 
 class Bert::Service
   attr_accessor :host
