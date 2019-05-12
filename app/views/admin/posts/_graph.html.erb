@@ -32,8 +32,8 @@
     graph(dom)
       .graphData(data)
       .backgroundColor('#f8f9fa')
-      .dagMode('bu')
-      .dagLevelDistance(Math.log(data.nodes.length) * 10)
+      .dagMode('zin')
+      .dagLevelDistance(Math.log2(data.nodes.length) * 3)
       .nodeVal('val_like')
       .onNodeClick((node) => {
         removeChildren(detail)
