@@ -24,7 +24,11 @@
   <table class="table mt-2">
     <thead class="thead-light">
       <tr>
-        <th>Word</th>
+        <th>
+          <%= sort_link @q, :word do %>
+            Word
+          <% end %>
+        </th>
         <th>
           <%= sort_link @q, :score do %>
             Score
