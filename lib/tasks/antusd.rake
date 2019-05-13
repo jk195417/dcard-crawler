@@ -1,5 +1,5 @@
 namespace :antusd do
-  desc '取得留言的文字向量'
+  desc '讀取 ANTUSD'
   task load: :environment do
     require 'csv'
     dic_path = 'lib/ANTUSD/opinion_words.csv'
@@ -12,6 +12,7 @@ namespace :antusd do
     puts '****************************************'
   end
 
+  desc '重新讀取 ANTUSD'
   task reload: :environment do
     require 'csv'
     dic_path = 'lib/ANTUSD/opinion_words.csv'

@@ -15,11 +15,11 @@ class Admin::PagesController < Admin::BaseController
 
     query = params[:query]
     forum = params[:forum]
-    @res = JSON.parse(HTTP.get(Dcard::Api.search_posts(query, forum: forum).to_s))
-    if @res.class == Hash && @res[:error].present?
+    posts_json = Dcard::Post.search(query: query, forum: forum)
+    if posts_json.class == Hash && posts_json[:error].present?
       flash[:notice] = 'Something wrong when searching on Dcard.'
     else
-      @posts = @res.map { |data| Post.new.load_from_dcard data }
+      @posts = Dcard::Post.to_records(posts_json)
       @exist_posts = Post.where(dcard_id: @posts.map(&:dcard_id))
       flash[:notice] = "We found #{@posts.size} Posts about #{query} on Dcard."
     end

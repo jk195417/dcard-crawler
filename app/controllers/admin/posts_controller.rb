@@ -18,7 +18,7 @@ class Admin::PostsController < Admin::BaseController
     @post.forum = forum
     respond_to do |format|
       if @post.save
-        Dcard::PostCrawler.perform_later(@post.id)
+        Dcard::UpdatePostJob.perform_later(@post.id)
         @alert = { type: 'notice', message: "Crawling comments of post #{@post.id}, you can refresh your browser to read it." }
         format.html { redirect_back fallback_location: admin_posts_path, notice: @alert[:message] }
       else
@@ -30,14 +30,14 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def update
-    Dcard::PostCrawler.perform_later(@post.id)
+    Dcard::UpdatePostJob.perform_later(@post.id)
     redirect_back fallback_location: admin_posts_path, notice: "Crawling comments of post #{@post.id}, you can refresh your browser to read it."
   end
 
   def batch_update
     post_ids = params[:ids]
     post_ids.each do |id|
-      Dcard::PostCrawler.perform_later(id)
+      Dcard::UpdatePostJob.perform_later(id)
     end
     redirect_back fallback_location: admin_posts_path, notice: "Crawling comments of posts #{post_ids}, you can refresh your browser to read it."
   end

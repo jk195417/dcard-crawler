@@ -9,19 +9,19 @@ class Admin::ForumsController < Admin::BaseController
   def show; end
 
   def create
-    GetForumsJob.perform_later
+    Dcard::UpdateForumsJob.perform_later
     redirect_back fallback_location: admin_forums_path, notice: 'Crawling every forums, you can refresh your browser to read it.'
   end
 
   def update
-    Dcard::ForumCrawler.perform_later(@forum.id)
+    Dcard::GetForumPostsJob.perform_later(@forum.id)
     redirect_back fallback_location: admin_forums_path, notice: "Crawling posts of forum #{@forum.id}, you can refresh your browser to read it."
   end
 
   def batch_update
     forum_ids = params[:ids]
     forum_ids.each do |id|
-      Dcard::ForumCrawler.perform_later(id)
+      Dcard::GetForumPostsJob.perform_later(id)
     end
     redirect_back fallback_location: admin_posts_path, notice: "Crawling posts of forums #{forum_ids}, you can refresh your browser to read it."
   end
