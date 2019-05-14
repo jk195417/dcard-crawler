@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_05_02_121434) do
+ActiveRecord::Schema.define(version: 2019_05_14_085011) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,18 @@ ActiveRecord::Schema.define(version: 2019_05_02_121434) do
     t.datetime "updated_at", null: false
     t.index ["post_id"], name: "index_reviews_on_post_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
+  end
+
+  create_table "sentiments", force: :cascade do |t|
+    t.float "positive"
+    t.float "confidence"
+    t.float "negative"
+    t.integer "sentiment"
+    t.string "sentimental_type"
+    t.bigint "sentimental_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["sentimental_type", "sentimental_id"], name: "index_sentiments_on_sentimental_type_and_sentimental_id"
   end
 
   create_table "users", force: :cascade do |t|
