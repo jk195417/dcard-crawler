@@ -1,3 +1,6 @@
+# Usage :
+# Dcard::UpdateForumsJob.perform_now
+
 class Dcard::UpdateForumsJob < ApplicationJob
   queue_as :default
 

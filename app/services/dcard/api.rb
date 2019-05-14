@@ -1,3 +1,14 @@
+# Usage :
+# Dcard::API.forums
+# Dcard::API.forum('3c')
+# Dcard::API.posts
+# Dcard::API.post(dcard_id)
+# Dcard::API.post_links(dcard_id)
+# Dcard::API.post_comments(dcard_id)
+# Dcard::API.search_posts(query: '組裝', forum: '3c', highlight: false
+#
+# Returm a url String
+
 class Dcard::API
   @@host = 'https://www.dcard.tw/_api'
 

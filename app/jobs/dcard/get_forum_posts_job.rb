@@ -1,3 +1,7 @@
+# Usage :
+# Dcard::GetForumPostsJob.perform_now(forum.id)
+# Dcard::GetForumPostsJob.perform_now(forum.id, true)
+
 class Dcard::GetForumPostsJob < ApplicationJob
   queue_as :default
 

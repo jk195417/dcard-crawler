@@ -1,3 +1,6 @@
+# Usage :
+# Dcard::GetPostCommentsJob.perform_now(post.id)
+
 class Dcard::GetPostCommentsJob < ApplicationJob
   queue_as :default
 

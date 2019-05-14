@@ -1,3 +1,6 @@
+# Usage :
+# Dcard::UpdatePostJob.perform_now(post.id)
+
 class Dcard::UpdatePostJob < ApplicationJob
   queue_as :default
 
