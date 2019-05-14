@@ -37,6 +37,8 @@ class Baidu::Aip
   end
 
   def sentiment(text)
+    Rails.logger.debug { "Baidu::Aip.new.sentiment(text), text can\'t be blank." } && return if text.blank?
+    Rails.logger.debug { "Baidu::Aip.new.sentiment(text), text byte can\'t >= 2048" } && return if text.bytesize > 2048
     params = { charset: 'UTF-8', access_token: access_token, client_secret: @secret_key }
     body = { text: text }
     response = HTTP.post("#{@host}/rpc/2.0/nlp/v1/sentiment_classify?#{params.to_query}", json: body)
@@ -55,6 +57,9 @@ class Baidu::Aip
     # }
     result = JSON.parse(response.to_s)
     result['items'].first
+  rescue StandardError
+    Rails.logger.error { "text=\n#{text}" }
+    Rails.logger.error { "response=\n#{response}" }
   end
 
   private
