@@ -1,0 +1,4 @@
+<% @alert.each do |key, value| %>
+  $('#flash').append('<%= bootstrap_alert(value, key) %>')
+<% end %>
+$('#analysis-post-<%= @post.dcard_id %>-btn').addClass('disabled').text('Analyzed')

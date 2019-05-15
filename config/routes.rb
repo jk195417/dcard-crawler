@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       get :export, on: :member
       get :graph, on: :member
       get :graph3d, on: :member
+      post :sentiment_analysis, on: :member
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]

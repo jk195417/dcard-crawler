@@ -1,5 +1,5 @@
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update export graph graph3d destroy]
+  before_action :set_post, only: %i[show update destroy export graph graph3d sentiment_analysis]
 
   def index
     @q = Post.ransack(params[:q])
@@ -60,6 +60,15 @@ class Admin::PostsController < Admin::BaseController
 
   def graph3d
     @comments = @post.comments.order(floor: :asc)
+  end
+
+  def sentiment_analysis
+    Baidu::GetPostSentimentJob.perform_later(@post.id)
+    @alert = { notice: "Scheduling sentiment analysis of post #{@post.id} and its comments" }
+    respond_to do |format|
+      format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
+      format.js
+    end
   end
 
   private

@@ -29,9 +29,14 @@
         <%= link_to 'pkuseg .xlsx', export_admin_post_path(@post, method: 'pkuseg', format: :xlsx), class: 'dropdown-item' %>
       </div>
     </div>
-    <%= link_to admin_post_path(@post), method: :patch, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
-      <i class="fas fa-cloud-download-alt"></i> Crawl
-    <% end %>
+    <div class="btn-group ml-1">
+      <%= link_to admin_post_path(@post), method: :patch, remote: true, class: 'btn btn-sm btn-outline-secondary' do %>
+        <i class="fas fa-cloud-download-alt"></i> Crawl
+      <% end %>
+      <%= link_to sentiment_analysis_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-secondary' do %>
+        <i class="fas fa-smile"></i> Sentiment Analysis
+      <% end %>
+    </div>
     <%= link_to admin_post_path(@post), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
       <i class="fas fa-trash"></i>
     <% end %>
