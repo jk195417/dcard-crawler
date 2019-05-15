@@ -10,16 +10,16 @@ module ApplicationHelper
   def bootstrap_alert(message, type = 'notice')
     icon = content_tag :i, '', class: 'fas fa-times'
     close_btn = content_tag :button, icon, class: 'close', 'data-dismiss': 'alert'
-    content = message + close_btn
+    content = message.to_s + close_btn
     content_tag(:div, content.html_safe, class: "alert #{bootstrap_alert_class(type)} alert-dismissible fade show").html_safe
   end
 
   def time_formatter(time)
-    time.strftime("%Y-%m-%d %H:%M:%S")
+    time.strftime('%Y-%m-%d %H:%M:%S')
   end
 
   def url_to_img(text)
-    result = text.gsub(URI.regexp) do |url|
+    text.gsub(URI::DEFAULT_PARSER.make_regexp) do |url|
       if url.match(/\.(jpeg|jpg|gif|png)$/)
         "<a href=\"#{url}\" target=\"_blank\"><img src=\"#{url}\"/></a>"
       else
