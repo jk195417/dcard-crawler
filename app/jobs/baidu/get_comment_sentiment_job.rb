@@ -4,8 +4,8 @@
 class Baidu::GetCommentSentimentJob < ApplicationJob
   def perform(id)
     comment = Comment.find id
-    text = comment.content&.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url
     Rails.logger.info { "Analyzing sentiment of Comment #{comment.floor} of Post #{comment.post_dcard_id}" }
+    text = comment.content&.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url
     result = Baidu::Aip.new.sentiment(text)
     Rails.logger.info { "Can\'t get sentiment of Comment #{comment.floor} of Post #{comment.post_dcard_id}" } && return if result.blank?
 

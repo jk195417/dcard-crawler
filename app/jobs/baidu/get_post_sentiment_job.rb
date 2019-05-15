@@ -4,9 +4,19 @@
 class Baidu::GetPostSentimentJob < ApplicationJob
   def perform(id)
     post = Post.find id
-    text = post.content&.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url
+
+    # comments
+    Rails.logger.info { "Scheduling analyze sentiment of comments, which belongs to post #{post.dcard_id}" }
+    post.comments.find_each do |comment|
+      Baidu::GetCommentSentimentJob.perform_later(comment.id)
+    end
+    
+    # post
     Rails.logger.info { "Analyzing sentiment of Post #{post.dcard_id}" }
+    text = post.content&.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url
     result = Baidu::Aip.new.sentiment(text)
+    Rails.logger.info { "Can\'t get sentiment of Post #{post.dcard_id}" } && return if result.blank?
+
     if post.sentiment.present?
       post.sentiment.positive = result['positive_prob']
       post.sentiment.negative = result['negative_prob']
@@ -19,11 +29,7 @@ class Baidu::GetPostSentimentJob < ApplicationJob
                            sentiment: result['sentiment'])
     end
     post.save!
-    Rails.logger.info { "Sentiment of Post #{post.dcard_id} is analyzed" }
-    post.comments.find_each do |comment|
-      Baidu::GetCommentSentimentJob.perform_later(comment.id)
-    end
     sleep(1)
-    Rails.logger.info { "Scheduling analyze sentiment of comments, which belongs to post #{post.dcard_id} " }
+    Rails.logger.info { "Sentiment of Post #{post.dcard_id} is analyzed" }
   end
 end
