@@ -6,6 +6,7 @@ class Admin::PagesController < Admin::BaseController
     @reviews_count = Review.count
     @users_count = User.count
     @opinion_words_count = OpinionWord.count
+    @sentiments_count = Sentiment.count
   end
 
   def explore
