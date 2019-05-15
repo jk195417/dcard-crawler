@@ -60,6 +60,7 @@ class Baidu::Aip
   rescue StandardError
     Rails.logger.error { "text=\n#{text}" }
     Rails.logger.error { "response=\n#{response}" }
+    false
   end
 
   private
