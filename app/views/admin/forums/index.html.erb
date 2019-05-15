@@ -44,12 +44,12 @@
           </th>
           <th>Link</th>
           <th>
-            <%= link_to admin_forums_path, method: :post, class: 'btn btn-sm btn-outline-secondary' do %>
+            <%= link_to admin_forums_path, method: :post, class: 'btn btn-sm btn-outline-secondary mt-1' do %>
               <i class="fas fa-cloud-download-alt"></i> Update Forums
             <% end %>
-            <%= link_to batch_update_admin_forums_path(ids: @forums.map(&:id)), method: :post, class: 'btn btn-sm btn-outline-secondary' do %>
-              <i class="fas fa-cloud-download-alt"></i> Crawl All (this page)
-            <% end %>
+            <div id="crawl-forums-btn" class="btn btn-sm btn-outline-secondary mr-1 mt-1">
+              <i class="fas fa-cloud-download-alt"></i> Crawl (this page)
+            </div>
           </th>
         </tr>
       </thead>
@@ -62,13 +62,13 @@
             <td class="btn-toolbar">
               <div class="btn-group">
                 <%= link_to admin_forum_path(forum), class: 'btn btn-sm btn-outline-secondary' do %>
-                  <i class="fas fa-info-circle"></i> Show
+                  <i class="fas fa-info-circle"></i>
                 <% end %>
                 <%= link_to admin_posts_path(q: { forum_id_eq: forum.id }), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-info-circle"></i> Posts
                 <% end %>
               </div>
-              <%= link_to admin_forum_path(forum), method: :patch, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+              <%= link_to admin_forum_path(forum), method: :patch, remote: true, class: 'btn btn-sm btn-outline-secondary ml-1', id: "crawl-forum-#{forum.alias}-btn" do %>
                 <i class="fas fa-cloud-download-alt"></i> Crawl
               <% end %>
               <%= link_to admin_forum_path(forum), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
@@ -82,3 +82,8 @@
     <%= paginate @forums %>
   </div>
 </div>
+<script type="text/javascript">
+  $('#crawl-forums-btn').click(function () {
+    $('a[id^="crawl-forum-"][id$="-btn"]').not('.disabled').toArray().forEach(btn => btn.click())
+  })
+</script>

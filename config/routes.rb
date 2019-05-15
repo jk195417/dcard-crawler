@@ -11,9 +11,7 @@ Rails.application.routes.draw do
     end
     get 'statistics', 'explore', controller: 'pages'
 
-    resources :forums, except: %i[new edit] do
-      post :batch_update, on: :collection
-    end
+    resources :forums, except: %i[new edit]
     resources :posts, except: %i[new edit] do
       get :export, on: :member
       get :graph, on: :member

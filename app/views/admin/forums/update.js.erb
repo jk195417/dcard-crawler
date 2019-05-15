@@ -1,0 +1,4 @@
+<% @alert.each do |key, value| %>
+  $('#flash').append('<%= bootstrap_alert(value, key) %>')
+<% end %>
+$('#crawl-forum-<%= @forum.alias %>-btn').addClass('disabled').text('Crawled')

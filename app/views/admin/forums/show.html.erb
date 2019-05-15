@@ -7,7 +7,7 @@
     <%= link_to admin_posts_path(q: { forum_id_eq: @forum.id }), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
       <i class="fas fa-info-circle"></i> Posts
     <% end %>
-    <%= link_to admin_forum_path(@forum), method: :patch, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+    <%= link_to admin_forum_path(@forum), method: :patch, remote: true, class: 'btn btn-sm btn-outline-secondary ml-1' do %>
       <i class="fas fa-cloud-download-alt"></i> Crawl
     <% end %>
     <%= link_to admin_forum_path(@forum), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
