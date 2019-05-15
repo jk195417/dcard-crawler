@@ -15,7 +15,6 @@ Rails.application.routes.draw do
       post :batch_update, on: :collection
     end
     resources :posts, except: %i[new edit] do
-      post :batch_update, on: :collection
       get :export, on: :member
       get :graph, on: :member
       get :graph3d, on: :member

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Admin::PostsController < Admin::BaseController
   before_action :set_post, only: %i[show update export graph graph3d destroy]
 
@@ -16,30 +14,26 @@ class Admin::PostsController < Admin::BaseController
     forum = Forum.find_by!(name: post_params[:forum_name])
     @post = Post.new(post_params)
     @post.forum = forum
+    @alert = {}
+    if @post.save
+      Dcard::UpdatePostJob.perform_later(@post.id)
+      @alert[:notice] = "Crawling comments of post #{@post.id}, you can refresh your browser to read it."
+    else
+      @alert[:alert] = "Can not crawl this post from #{@post.dcard_url}, maybe you already crawled it."
+    end
     respond_to do |format|
-      if @post.save
-        Dcard::UpdatePostJob.perform_later(@post.id)
-        @alert = { type: 'notice', message: "Crawling comments of post #{@post.id}, you can refresh your browser to read it." }
-        format.html { redirect_back fallback_location: admin_posts_path, notice: @alert[:message] }
-      else
-        @alert = { type: 'alert', message: "Can not crawl this post from #{@post.dcard_url}, maybe you already crawled it." }
-        format.html { redirect_back fallback_location: admin_posts_path, alert: @alert[:message] }
-      end
+      format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
       format.js
     end
   end
 
   def update
     Dcard::UpdatePostJob.perform_later(@post.id)
-    redirect_back fallback_location: admin_posts_path, notice: "Crawling comments of post #{@post.id}, you can refresh your browser to read it."
-  end
-
-  def batch_update
-    post_ids = params[:ids]
-    post_ids.each do |id|
-      Dcard::UpdatePostJob.perform_later(id)
+    @alert = { notice: "Crawling comments of post #{@post.id}, you can refresh your browser to read it." }
+    respond_to do |format|
+      format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
+      format.js
     end
-    redirect_back fallback_location: admin_posts_path, notice: "Crawling comments of posts #{post_ids}, you can refresh your browser to read it."
   end
 
   def destroy

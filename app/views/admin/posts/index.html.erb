@@ -49,9 +49,6 @@
   </div>
   <br>
   <div class="d-flex align-items-center">
-    <%= link_to batch_update_admin_posts_path(ids: @posts.map(&:id)), method: :post, class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
-      <i class="fas fa-cloud-download-alt"></i> Crawl comments of this page's posts
-    <% end %>
   </div>
   <br>
   <div>
@@ -73,7 +70,11 @@
               Reviews
             <% end %>
           </th>
-          <th></th>
+          <th>
+            <div id="crawl-posts-btn" class="btn btn-sm btn-outline-secondary mr-1 mt-1">
+              <i class="fas fa-cloud-download-alt"></i> Crawl (this page)
+            </div>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -109,7 +110,7 @@
                 </div>
               </div>
               <div class="btn-group mr-1 my-1">
-                <%= link_to admin_post_path(post), method: :patch, class: 'btn btn-sm btn-outline-secondary' do %>
+                <%= link_to admin_post_path(post), method: :patch, remote: true, class: 'btn btn-sm btn-outline-secondary', id: "crawl-post-#{post.dcard_id}-btn" do %>
                   <i class="fas fa-cloud-download-alt"></i> Crawl
                 <% end %>
               </div>
@@ -141,3 +142,8 @@
     <%= paginate @posts %>
   </div>
 </div>
+<script type="text/javascript">
+  $('#crawl-posts-btn').click(function () {
+    $('a[id^="crawl-post-"][id$="-btn"]').not('.disabled').toArray().forEach(btn => btn.click())
+  })
+</script>

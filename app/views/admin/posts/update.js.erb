@@ -1,4 +1,4 @@
 <% @alert.each do |key, value| %>
-  $('#flash').append('<%= bootstrap_alert(key, value) %>')
+  $('#flash').append('<%= bootstrap_alert(value, key) %>')
 <% end %>
 $('#crawl-post-<%= @post.dcard_id %>-btn').addClass('disabled').text('Crawled')
