@@ -7,7 +7,7 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def show
-    @comments = @post.comments.order(floor: :asc).page(params[:page])
+    @comments = @post.comments.includes(:sentiment).order(floor: :asc).page(params[:page])
   end
 
   def create
@@ -55,11 +55,11 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def graph
-    @comments = @post.comments.order(floor: :asc)
+    @comments = @post.comments.includes(:sentiment).order(floor: :asc)
   end
 
   def graph3d
-    @comments = @post.comments.order(floor: :asc)
+    @comments = @post.comments.includes(:sentiment).order(floor: :asc)
   end
 
   def sentiment_analysis

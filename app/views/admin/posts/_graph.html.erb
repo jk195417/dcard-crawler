@@ -1,7 +1,27 @@
 <div class="container">
-  <%= link_to :back, class: 'btn btn-sm btn-outline-secondary' do %>
-    <i class="fas fa-redo"></i> Back
-  <% end %>
+  <div class="btn-toolbar">
+    <%= link_to admin_post_path, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <div class="dropdown ml-2">
+      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+        Node Color
+      </div>
+      <div class="dropdown-menu">
+        <div class="dropdown-item" id="color-by-gender-btn"> By gender</div>
+        <div class="dropdown-item" id="color-by-sentiment-btn"> By sentiment</div>
+      </div>
+    </div>
+    <div class="dropdown ml-2">
+      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
+        Node Size
+      </div>
+      <div class="dropdown-menu">
+        <div class="dropdown-item" id="size-by-like-btn">By like</div>
+        <div class="dropdown-item" id="size-by-length-btn">By length</div>
+      </div>
+    </div>
+  </div>
   <div class="row mt-2">
     <div class="col-12 col-md-6">
       <div id="graph-container">
@@ -16,11 +36,9 @@
 <br>
 <script>
   var data = <%= sanitize force_graph_data_formater(post, comments).to_json %>
-  var detail = document.getElementById('detail')
-  var container = document.getElementById('graph-container')
-  var graph = document.getElementById('graph')
   
   function adjustGraphSize(graph) {
+    const container = document.getElementById('graph-container')
     graph.width(container.clientWidth).height(window.innerHeight - 100)
   }
   
@@ -29,22 +47,24 @@
   }
   
   function setupGraph(graph, dom, data) {
-    graph(dom)
-      .graphData(data)
+    graph(dom).graphData(data)
       .backgroundColor('#f8f9fa')
       .dagMode('zin')
       .dagLevelDistance(Math.log2(data.nodes.length) * 3)
-      .nodeVal('val_like')
+      .nodeVal('valLike')
+      .nodeColor('genderColor')
       .onNodeClick((node) => {
+        const detail = document.getElementById('detail')
         removeChildren(detail)
         detail.insertAdjacentHTML('afterbegin', node.html);
       })
       .linkWidth(2)
     adjustGraphSize(graph)
-  
-    window.addEventListener('resize', () => {
-      adjustGraphSize(graph)
-    })
+    window.addEventListener('resize', () => adjustGraphSize(graph))
+    document.getElementById('color-by-gender-btn').addEventListener('click', () => graph.nodeColor('genderColor'))
+    document.getElementById('color-by-sentiment-btn').addEventListener('click', () => graph.nodeColor('sentimentColor'))
+    document.getElementById('size-by-like-btn').addEventListener('click', () => graph.nodeVal('valLike'))
+    document.getElementById('size-by-length-btn').addEventListener('click', () => graph.nodeVal('valLength'))
   }
 </script>
 <style>
