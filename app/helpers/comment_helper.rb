@@ -1,4 +1,8 @@
 module CommentHelper
+  def bert_multi_sentences_encoder(text)
+    text.gsub(URI.regexp, '').gsub(/\n/, ' ||| ').gsub(/^ \|\|\| /, '')
+  end
+
   def url_to_img(text)
     text.gsub(URI::DEFAULT_PARSER.make_regexp) do |url|
       link_to url, target: '_blank' do
@@ -6,7 +10,7 @@ module CommentHelper
       end
     end.html_safe
   end
-  
+
   def gender_color(gender, opacity: 1)
     if gender == 'M'
       "rgba(102,212,253,#{opacity})"

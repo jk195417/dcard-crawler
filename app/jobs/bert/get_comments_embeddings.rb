@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 class Bert::GetCommentsEmbeddings < ApplicationJob
-  queue_as :default
+
 
   def perform(first_comment_id, last_comment_id)
     comments = Comment.where(id: (first_comment_id..last_comment_id), embedding: nil).where.not(content: [nil, '']).pluck(:id, :content)
@@ -11,7 +9,7 @@ class Bert::GetCommentsEmbeddings < ApplicationJob
     comment_contents = []
     comments.each do |comment|
       comment_ids << comment[0]
-      comment_contents << comment[1]
+      comment_contents << bert_multi_sentences_encoder(comment[1])
     end
 
     # get comments embeddings
