@@ -1,48 +1,36 @@
 module GraphHelper
-  def force_graph_data_formater(post, comments)
-    result = {
-      nodes: [
-        {
-          id: 'B0',
-          name: 'B0',
-          val: 1,
-          val_like: Math.log(post.like_count || 1) + 1,
-          val_content: Math.log(post.content&.size || 1) + 1,
-          color: gender_color(post.gender),
-          html: node_html(post)
-        }
-      ],
-      links: []
+  def force_graph_node(post_or_comment)
+    {
+      id: "B#{post_or_comment.floor}",
+      name: "B#{post_or_comment.floor}",
+      val: 1,
+      valLike: Math.log(post_or_comment.like_count || 1) + 1,
+      valLength: Math.log(post_or_comment.content&.size || 1) + 1,
+      genderColor: gender_color(post_or_comment.gender),
+      sentimentColor: sentiment_color(post_or_comment.sentiment&.sentiment, opacity: post_or_comment.sentiment&.confidence),
+      html: dcard_html(post_or_comment)
     }
-    comments.each do |comment|
-      result[:nodes] << {
-        id: "B#{comment.floor}",
-        name: "B#{comment.floor}",
-        val: 1,
-        val_like: Math.log(comment.like_count || 1) + 1,
-        val_content: Math.log(comment.content&.size || 1) + 1,
-        color: gender_color(comment.gender),
-        html: node_html(comment)
-      }
-    end
-    comments.each do |comment|
-      if comment.mentions.empty?
-        result[:links] << {
-          source: "B#{comment.floor}",
-          target: 'B0',
-          color: '#343a40'
-        }
-      else
-        comment.mentions.each do |mention|
-          node_index = result[:nodes].index { |node| node[:id] == mention }
-          next unless node_index
+  end
 
-          result[:links] << {
-            source: "B#{comment.floor}",
-            target: mention,
-            color: '#343a40'
-          }
-        end
+  def force_graph_link(post_or_comment, target: 'B0')
+    {
+      source: "B#{post_or_comment.floor}",
+      target: target,
+      color: '#343a40'
+    }
+  end
+
+  def force_graph_data_formater(post, comments)
+    result = { nodes: [], links: [] }
+    result[:nodes] << force_graph_node(post)
+    comments.each { |comment| result[:nodes] << force_graph_node(comment) }
+    comments.each do |comment|
+      result[:links] << force_graph_link(comment) if comment.mentions.empty?
+      comment.mentions.each do |mention|
+        node_index = result[:nodes].index { |node| node[:id] == mention }
+        next unless node_index
+
+        result[:links] << force_graph_link(comment, target: mention)
       end
     end
     result
