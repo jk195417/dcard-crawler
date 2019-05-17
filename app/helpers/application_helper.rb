@@ -17,14 +17,4 @@ module ApplicationHelper
   def time_formatter(time)
     time.strftime('%Y-%m-%d %H:%M:%S')
   end
-
-  def url_to_img(text)
-    text.gsub(URI::DEFAULT_PARSER.make_regexp) do |url|
-      if url.match(/\.(jpeg|jpg|gif|png)$/)
-        "<a href=\"#{url}\" target=\"_blank\"><img src=\"#{url}\"/></a>"
-      else
-        "<a href=\"#{url}\">#{url}</a>"
-      end
-    end.html_safe
-  end
 end
