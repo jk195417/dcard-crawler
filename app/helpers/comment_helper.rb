@@ -1,5 +1,7 @@
 module CommentHelper
   def bert_multi_sentences_encoder(text)
+    raise "Can't encode \"\" or nil" if text.blank?
+    
     text.gsub(URI.regexp, '').gsub(/\n/, ' ||| ').gsub(/^ \|\|\| /, '')
   end
 
