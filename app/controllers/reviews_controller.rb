@@ -9,11 +9,14 @@ class ReviewsController < ApplicationController
   def new
     reviewd_post_ids = current_user.reviews.pluck(:post_id)
     @post = Post.reviewable.where.not(id: reviewd_post_ids).random.first
+    @comments = @post.comments.includes(:sentiment).order(:floor)
     redirect_to(reviews_path, alert: "No post can be reviewed.") if @post.blank?
     @review = current_user.reviews.build(post: @post)
   end
 
-  def edit; end
+  def edit
+    @comments = @review.post.comments.includes(:sentiment).order(:floor)
+  end
 
   def create
     @review = Review.new(review_params)

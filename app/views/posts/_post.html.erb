@@ -1,4 +1,4 @@
 <%= dcard_html(post) %>
-<% (comments || post.comments.order(:floor)).each do |comment| %>
+<% (comments ||= post.comments.includes(:sentiment).order(:floor)).each do |comment| %>
   <%= dcard_html(comment) %>
 <% end  %>
