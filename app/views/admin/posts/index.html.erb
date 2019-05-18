@@ -121,6 +121,9 @@
                   <%= link_to sentiment_analysis_admin_post_path(post), method: :post, remote: true, class: 'dropdown-item', id: "analysis-post-#{post.dcard_id}-btn" do %>
                     <i class="fas fa-smile"></i> Sentiment Analysis
                   <% end %>
+                  <%= link_to compute_embedding_admin_post_path(post), method: :post, remote: true, class: 'dropdown-item', id: "compute-embedding-post-#{post.dcard_id}-btn" do %>
+                    <i class="fas fa-vector-square"></i> Compute Embedding
+                  <% end %>
                   <div class="dropdown-header"><i class="fas fa-file-download"></i> Segment by</div>
                   <%= link_to 'jieba.txt', segment_admin_post_path(post, method: 'jieba', format: :text), method: :post, class: 'dropdown-item' %>
                   <%= link_to 'snownlp.txt', segment_admin_post_path(post, method: 'snownlp', format: :text), method: :post, class: 'dropdown-item' %>

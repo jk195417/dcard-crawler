@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 Rails.application.routes.draw do
   root 'pages#index'
   devise_for :users
@@ -17,6 +15,7 @@ Rails.application.routes.draw do
       get :graph3d, on: :member
       post :segment, on: :member
       post :sentiment_analysis, on: :member
+      post :compute_embedding, on: :member
     end
     resources :reviews, only: %i[index destroy]
     resources :users, only: %i[index destroy]

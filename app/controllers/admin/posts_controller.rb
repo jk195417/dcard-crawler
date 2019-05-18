@@ -1,5 +1,5 @@
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update destroy graph graph3d segment sentiment_analysis]
+  before_action :set_post, only: %i[show update destroy graph graph3d segment sentiment_analysis compute_embedding]
 
   def index
     @q = Post.ransack(params[:q])
@@ -64,7 +64,16 @@ class Admin::PostsController < Admin::BaseController
 
   def sentiment_analysis
     Baidu::GetPostSentimentJob.perform_later(@post.id)
-    @alert = { notice: "Scheduling sentiment analysis of post #{@post.id} and its comments" }
+    @alert = { notice: "Scheduling sentiment analysis of post #{@post.id} and its comments." }
+    respond_to do |format|
+      format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
+      format.js
+    end
+  end
+
+  def compute_embedding
+    Bert::GetPostEmbeddingJob.perform_later(@post.id)
+    @alert = { notice: "Scheduling compute embedding of post #{@post.id} and its comments." }
     respond_to do |format|
       format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
       format.js
