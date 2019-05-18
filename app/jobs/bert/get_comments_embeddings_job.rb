@@ -16,12 +16,11 @@ class Bert::GetCommentsEmbeddingsJob < ApplicationJob
       rescue StandardError => e
         Rails.logger.error { e }
       end
-      puts sentences.size
     end
+    Rails.logger.info { 'No comments need to get embedding.' } && return if sentences.empty?
+
     embeddings = bc.perform(ids[0], sentences)
-    new_comments = embeddings.map.with_index do |embedding, index|
-      { id: comment_ids[index], embedding: embedding }
-    end
+    new_comments = embeddings.map.with_index { |embedding, index| { id: comment_ids[index], embedding: embedding } }
     result = Comment.import(new_comments, validate: false, on_duplicate_key_update: { conflict_target: [:id], columns: [:embedding] })
     Rails.logger.info { "Comments #{result.ids} embeddings updated." }
     new_comments
