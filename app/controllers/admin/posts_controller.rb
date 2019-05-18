@@ -1,5 +1,5 @@
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update destroy graph graph3d segmentation sentiment_analysis]
+  before_action :set_post, only: %i[show update destroy graph graph3d segment sentiment_analysis]
 
   def index
     @q = Post.ransack(params[:q])
@@ -49,7 +49,7 @@ class Admin::PostsController < Admin::BaseController
     @comments = @post.comments.includes(:sentiment).order(floor: :asc)
   end
 
-  def segmentation
+  def segment
     text = [@post.content]
     @post.comments.order(floor: :asc).each do |comment|
       text << comment.content if comment.content.present?
@@ -57,8 +57,8 @@ class Admin::PostsController < Admin::BaseController
     method = params.fetch(:method, 'jieba')
     @segmentation = Segmentation::Service.new.perform(text, method)
     respond_to do |format|
-      format.text { response.headers['Content-Disposition'] = "attachment; filename=\"dcard-#{@post.dcard_id}-#{method}-segmentation.txt\"" }
-      format.xlsx { render xlsx: 'segmentation', filename: "dcard-#{@post.dcard_id}-#{method}-segmentation.xlsx" }
+      format.text { response.headers['Content-Disposition'] = "attachment; filename=\"dcard-#{@post.dcard_id}-#{method}.txt\"" }
+      format.xlsx { render xlsx: 'segment', filename: "dcard-#{@post.dcard_id}-#{method}.xlsx" }
     end
   end
 

@@ -121,13 +121,13 @@
                   <%= link_to sentiment_analysis_admin_post_path(post), method: :post, remote: true, class: 'dropdown-item', id: "analysis-post-#{post.dcard_id}-btn" do %>
                     <i class="fas fa-smile"></i> Sentiment Analysis
                   <% end %>
-                  <div class="dropdown-header"><i class="fas fa-file-download"></i> Segmentation by</div>
-                  <%= link_to 'jieba.txt', segmentation_admin_post_path(post, method: 'jieba', format: :text), method: :post, class: 'dropdown-item' %>
-                  <%= link_to 'snownlp.txt', segmentation_admin_post_path(post, method: 'snownlp', format: :text), method: :post, class: 'dropdown-item' %>
-                  <%= link_to 'pkuseg.txt', segmentation_admin_post_path(post, method: 'pkuseg', format: :text), method: :post, class: 'dropdown-item' %>
-                  <%= link_to 'jieba.xlsx', segmentation_admin_post_path(post, method: 'jieba', format: :xlsx), method: :post, class: 'dropdown-item' %>
-                  <%= link_to 'snownlp.xlsx', segmentation_admin_post_path(post, method: 'snownlp', format: :xlsx), method: :post, class: 'dropdown-item' %>
-                  <%= link_to 'pkuseg.xlsx', segmentation_admin_post_path(post, method: 'pkuseg', format: :xlsx), method: :post, class: 'dropdown-item' %>
+                  <div class="dropdown-header"><i class="fas fa-file-download"></i> Segment by</div>
+                  <%= link_to 'jieba.txt', segment_admin_post_path(post, method: 'jieba', format: :text), method: :post, class: 'dropdown-item' %>
+                  <%= link_to 'snownlp.txt', segment_admin_post_path(post, method: 'snownlp', format: :text), method: :post, class: 'dropdown-item' %>
+                  <%= link_to 'pkuseg.txt', segment_admin_post_path(post, method: 'pkuseg', format: :text), method: :post, class: 'dropdown-item' %>
+                  <%= link_to 'jieba.xlsx', segment_admin_post_path(post, method: 'jieba', format: :xlsx), method: :post, class: 'dropdown-item' %>
+                  <%= link_to 'snownlp.xlsx', segment_admin_post_path(post, method: 'snownlp', format: :xlsx), method: :post, class: 'dropdown-item' %>
+                  <%= link_to 'pkuseg.xlsx', segment_admin_post_path(post, method: 'pkuseg', format: :xlsx), method: :post, class: 'dropdown-item' %>
                 </div>
               </div>
               <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-danger my-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
