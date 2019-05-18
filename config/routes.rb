@@ -13,9 +13,9 @@ Rails.application.routes.draw do
 
     resources :forums, except: %i[new edit]
     resources :posts, except: %i[new edit] do
-      get :export, on: :member
       get :graph, on: :member
       get :graph3d, on: :member
+      post :segmentation, on: :member
       post :sentiment_analysis, on: :member
     end
     resources :reviews, only: %i[index destroy]
