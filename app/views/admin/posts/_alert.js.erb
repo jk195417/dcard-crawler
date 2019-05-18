@@ -1,0 +1,3 @@
+<% alert.each do |key, value| %>
+  $('#flash').append('<%= bootstrap_alert(value, key) %>')
+<% end %>
