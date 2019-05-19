@@ -2,6 +2,8 @@
 # Baidu::GetCommentSentimentJob.perform_now(comment.id)
 
 class Baidu::GetCommentSentimentJob < ApplicationJob
+  queue_as :baidu
+
   def perform(id)
     comment = Comment.find id
     Rails.logger.info { "Analyzing sentiment of Comment #{comment.floor} of Post #{comment.post_dcard_id}" }

@@ -1,0 +1,4 @@
+:concurrency: 5
+:timeout: 30
+:queues:
+  - baidu

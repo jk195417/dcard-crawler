@@ -1,3 +1,4 @@
-concurrency: 20
-timeout: 60
-max_retries: 1
+:concurrency: 20
+:timeout: 30
+:queues:
+  - default

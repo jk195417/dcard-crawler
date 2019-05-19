@@ -51,5 +51,6 @@ rails bert:get_comments_embeddings # 取得 沒有計算過文字向量且內容
 Sidekiq
 
 ```sh
-$ sidekiq
+$ sidekiq # 20 threads, perform jobs in default queue
+$ sidekiq -C ./config/sidekiq_baidu.yml # 5 threads, perform jobs in baidu queue
 ```

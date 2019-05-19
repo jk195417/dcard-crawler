@@ -2,6 +2,8 @@
 # Bert::GetPostEmbeddingJob.perform_later(post.id)
 
 class Bert::GetPostEmbeddingJob < ApplicationJob
+  queue_as :default
+  
   include CommentHelper
 
   def perform(id)

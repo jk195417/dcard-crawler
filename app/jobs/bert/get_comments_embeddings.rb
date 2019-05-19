@@ -1,5 +1,5 @@
 class Bert::GetCommentsEmbeddings < ApplicationJob
-
+  queue_as :default
 
   def perform(first_comment_id, last_comment_id)
     comments = Comment.where(id: (first_comment_id..last_comment_id), embedding: nil).where.not(content: [nil, '']).pluck(:id, :content)

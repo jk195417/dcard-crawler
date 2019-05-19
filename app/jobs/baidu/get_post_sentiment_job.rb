@@ -2,6 +2,8 @@
 # Baidu::GetPostSentimentJob.perform_now(Post.random.first.id)
 
 class Baidu::GetPostSentimentJob < ApplicationJob
+  queue_as :baidu
+  
   def perform(id)
     post = Post.find id
 
@@ -10,7 +12,7 @@ class Baidu::GetPostSentimentJob < ApplicationJob
     post.comments.find_each do |comment|
       Baidu::GetCommentSentimentJob.perform_later(comment.id)
     end
-    
+
     # post
     Rails.logger.info { "Analyzing sentiment of Post #{post.dcard_id}" }
     text = post.content&.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url

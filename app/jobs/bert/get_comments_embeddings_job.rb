@@ -2,6 +2,8 @@
 # Bert::GetCommentsEmbeddingsJob.perform_later(comments.map(&:id))
 
 class Bert::GetCommentsEmbeddingsJob < ApplicationJob
+  queue_as :default
+  
   include CommentHelper
 
   def perform(ids)
