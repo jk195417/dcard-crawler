@@ -26,6 +26,8 @@ gem 'ransack' # ActiveRecord searching
 gem 'rubyzip', '>= 1.2.1' # Zip file
 gem 'sidekiq' # Threading workers
 gem 'simple_form' # Form Builder
+gem 'kmeans-clusterer' # K means
+
 
 # defalut but useless gem
 # gem 'sqlite3' # Use sqlite3 as the database for Active Record
