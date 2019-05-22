@@ -7,6 +7,9 @@
     <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
       <i class="far fa-file-alt"></i> Reviews
     <% end %>
+    <%= link_to clusters_admin_post_path(@post, k: 2), class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+      <i class="fas fa-braille"></i> Clusters
+    <% end %>
     <div class="dropdown ml-1">
       <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
         <i class="fas fa-project-diagram"></i> Graph

@@ -13,6 +13,7 @@ Rails.application.routes.draw do
     resources :posts, except: %i[new edit] do
       get :graph, on: :member
       get :graph3d, on: :member
+      get :clusters, on: :member
       post :segment, on: :member
       post :sentiment_analysis, on: :member
       post :compute_embedding, on: :member
