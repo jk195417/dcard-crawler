@@ -24,7 +24,7 @@ class Dcard::API
     if forum
       "#{@@host}/forums/#{forum}/posts?#{options_query(options)}"
     else
-      "#{@@host}/posts/?#{options_query(options)}"
+      "#{@@host}/posts?#{options_query(options)}"
     end
   end
 

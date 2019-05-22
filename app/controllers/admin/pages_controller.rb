@@ -12,11 +12,13 @@ class Admin::PagesController < Admin::BaseController
   def explore
     @posts = []
     @exist_posts = []
-    return if params[:query].blank?
-
     query = params[:query]
     forum = params[:forum]
-    posts_json = Dcard::Post.search(query: query, forum: forum)
+    posts_json = if query.blank?
+                   Dcard::Post.get(popular: true)
+                 else
+                   Dcard::Post.search(query: query, forum: forum)
+                 end
     if posts_json.class == Hash && posts_json[:error].present?
       flash[:notice] = 'Something wrong when searching on Dcard.'
     else
