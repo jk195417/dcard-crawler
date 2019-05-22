@@ -18,7 +18,7 @@
   <div class="mt-2" id="collapses">
     <div class="mb-2">
       <% @clusters.each.with_index do |cluster, index| %>
-        <div class="btn btn-sm btn-outline-secondary" data-toggle="collapse" href="#cluster-<%= index %>">
+        <div class="btn btn-sm btn-outline-secondary mr-1 mb-1" data-toggle="collapse" href="#cluster-<%= index %>">
           Cluster <%= index %> <span class="badge badge-light"><%= cluster.size %></span>
         </div>
       <% end %>
