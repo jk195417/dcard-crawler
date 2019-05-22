@@ -1,5 +1,6 @@
 class Admin::PostsController < Admin::BaseController
   before_action :set_post, only: %i[show update destroy graph graph3d segment sentiment_analysis compute_embedding]
+  before_action :set_comments, only: %i[show graph graph3d]
 
   def index
     @q = Post.ransack(params[:q])
@@ -7,7 +8,7 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def show
-    @comments = @post.comments.includes(:sentiment).order(floor: :asc).page(params[:page])
+    @comments = @comments.page(params[:page])
   end
 
   def create
@@ -41,12 +42,10 @@ class Admin::PostsController < Admin::BaseController
     redirect_to admin_posts_url, notice: 'Post was successfully destroyed.'
   end
 
-  def graph
-    @comments = @post.comments.includes(:sentiment).order(floor: :asc)
-  end
+  def graph; end
 
-  def graph3d
-    @comments = @post.comments.includes(:sentiment).order(floor: :asc)
+  def graph3d; end
+
   end
 
   def segment
@@ -84,6 +83,10 @@ class Admin::PostsController < Admin::BaseController
 
   def set_post
     @post = Post.find(params[:id])
+  end
+
+  def set_comments
+    @comments = @post.comments.includes(:sentiment).order(floor: :asc)
   end
 
   def post_params
