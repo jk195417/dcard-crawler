@@ -2,7 +2,7 @@ module CommentHelper
   def bert_multi_sentences_encoder(text)
     raise "Can't encode \"\" or nil." if text.blank?
 
-    result = text.gsub(URI::DEFAULT_PARSER.make_regexp, '').gsub(/\s*\n+\s*/, ' ||| ').gsub(/(\A\s\|\|\|\s|\s\|\|\|\s\z)/, '')
+    result = text.gsub(URI::DEFAULT_PARSER.make_regexp, '').gsub(/B\d+/, '').gsub(/\s*\n+\s*/, ' ||| ').gsub(/(\A\s\|\|\|\s|\s\|\|\|\s\z)/, '')
     raise 'After encode, result become "" or nil.' if result.blank?
 
     result
