@@ -40,7 +40,7 @@
               <i class="ml-2 far fa-heart"></i> <%= post.like_count %>
             </td>
             <td>
-              <%= link_to admin_posts_path(post: post.as_json), method: :post, remote: true, class: 'btn btn-sm btn-outline-primary', id: "crawl-post-#{post.dcard_id}-btn" do %>
+              <%= link_to admin_posts_path(post: { dcard_id: post.dcard_id, forum_name: post.forum_name }), method: :post, remote: true, class: 'btn btn-sm btn-outline-primary', id: "crawl-post-#{post.dcard_id}-btn" do %>
                 <i class="fas fa-cloud-download-alt"></i> Crawl
               <% end %>
             </td>
