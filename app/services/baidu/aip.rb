@@ -40,7 +40,7 @@ class Baidu::Aip
     Rails.logger.debug { "Baidu::Aip.new.sentiment(text), text can\'t be blank." } && return if text.blank?
     if text.bytesize > 2048
       Rails.logger.info { "Baidu::Aip.new.sentiment(text), text byte can't >= 2048, we will using its first 2048 byte to run analysis" }
-      text = text.byteslice(0..2048)[0..-2]
+      text = text.byteslice(0..2048).chop
     end
     params = { charset: 'UTF-8', access_token: access_token, client_secret: @secret_key }
     body = { text: text }
