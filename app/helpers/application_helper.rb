@@ -17,4 +17,8 @@ module ApplicationHelper
   def time_formatter(time)
     time.strftime '%Y-%m-%d %H:%M:%S'
   end
+
+  def random_color(opacity: 1)
+    "rgba(#{Random.rand(0..255)}, #{Random.rand(0..255)}, #{Random.rand(0..255)}, #{opacity})"
+  end
 end
