@@ -4,12 +4,14 @@
 class OpinionesClusterJob < ApplicationJob
   queue_as :default
 
-  def perform(id, k=2)
+  def perform(id, k = 2)
     # find k clusters in data
     post = Post.find id
     comments = post.comments.where.not(embedding: nil).order(:floor)
     post_and_comments = [post] + comments
     data, labels = generate_data_and_labels post_and_comments
+    return nil if data[0].nil? || data.size <= 1
+
     kmeans = KMeansClusterer.run k.to_i, data, labels: labels
     kmeans
   end

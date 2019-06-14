@@ -1,0 +1,64 @@
+<%= render 'admin/shared/header' %>
+<div class="container mb-2">
+  <div class="btn-toolbar mt-2">
+    <%= link_to admin_post_path, class: 'btn btn-sm btn-outline-secondary mr-auto' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <%= render 'tasks_btn', post: @post %>
+  </div>
+  <div class="mt-2">
+    <% if @kmeans %>
+      <%= form_tag visualization_admin_post_path(@post), method: :get, class: "form-inline" do %>
+        <div class="form-group mr-2">
+          <label class="mr-1">K :</label>
+          <%= number_field_tag :k, params[:k], class: "form-control" %>
+        </div>
+        <button type="submit" class="btn btn-sm btn-outline-secondary">Cluster</button>
+      <% end %>
+      <p class="text-muted small">Silhouette score: <%= @kmeans.silhouette.round(5) %></p>
+    <% else %>
+      <p>
+        You need to
+        <%= link_to compute_embedding_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "compute-embedding-post-#{@post.dcard_id}-btn" do %>
+          <i class="fas fa-vector-square"></i> Compute Embedding
+        <% end %>
+        first
+      </p>
+    <% end %>
+    <% unless @post.sentiment.present? %>
+      <p>
+        You need to
+        <%= link_to sentiment_analysis_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "sentiment-analysis-post-#{@post.dcard_id}-btn" do %>
+          <i class="fas fa-smile"></i> Sentiment Analysis
+        <% end %>
+        first
+      </p>
+    <% end %>
+  </div>
+</div>
+<%= render 'graph', post: @post, comments: @comments %>
+<script>
+  // Add clusters colors to nodes
+  var clusters = <%= sanitize @clusters.to_json %> || []
+  function randomColor() {
+    let r = (Math.random() * 255) | 0
+    let g = (Math.random() * 255) | 0
+    let b = (Math.random() * 255) | 0
+    return `rgb(${r}, ${g}, ${b})`
+  }
+  function generateClustersColors(){
+    clusters.forEach(cluster => {
+      let color = randomColor()
+      cluster.forEach(point => {
+        let node = data.nodes.find(node => node.floor === point)
+        node["clusterColor"] = color
+      })
+    })
+  }
+  document.getElementById('color-by-cluster-btn').addEventListener('click', () => generateClustersColors())
+
+  // Draw graph
+  var Graph = ForceGraph3D()
+  setupGraph(Graph, graph, data)
+  Graph.backgroundColor('#adb5bd')
+</script>

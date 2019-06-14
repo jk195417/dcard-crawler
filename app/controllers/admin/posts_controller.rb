@@ -1,6 +1,6 @@
 class Admin::PostsController < Admin::BaseController
-  before_action :set_post, only: %i[show update destroy graph graph3d clusters segment sentiment_analysis compute_embedding]
-  before_action :set_comments, only: %i[show graph graph3d]
+  before_action :set_post, except: %i[index create]
+  before_action :set_comments, only: %i[show graph graph3d visualization]
 
   def index
     @q = Post.ransack(params[:q])
@@ -47,8 +47,13 @@ class Admin::PostsController < Admin::BaseController
   def graph3d; end
 
   def clusters
-    @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 2 }
+    @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 1 }
     @clusters = @kmeans.clusters.map { |cluster| @post.comments.where(floor: cluster.points.map(&:label)).includes(:sentiment).order(floor: :asc) }
+  end
+
+  def visualization
+    @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 1 }
+    @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
   end
 
   def segment

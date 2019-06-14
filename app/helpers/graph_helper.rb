@@ -3,6 +3,7 @@ module GraphHelper
     {
       id: "B#{post_or_comment.floor}",
       name: "B#{post_or_comment.floor}",
+      floor: post_or_comment.floor,
       val: 1,
       valLike: Math.log(post_or_comment.like_count || 1) + 1,
       valLength: Math.log(post_or_comment.content&.size || 1) + 1,

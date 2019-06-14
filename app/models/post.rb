@@ -2,7 +2,7 @@ class Post < ApplicationRecord
   include Mentionable
 
   belongs_to :forum, counter_cache: true
-  has_one :sentiment, as: :sentimental
+  has_one :sentiment, as: :sentimental, dependent: :destroy
   has_many :comments, dependent: :destroy
   has_many :reviews, dependent: :destroy
 

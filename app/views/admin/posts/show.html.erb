@@ -5,43 +5,12 @@
       <i class="fas fa-redo"></i> Back
     <% end %>
     <%= link_to admin_reviews_path(q: { post_id_eq: @post.id }), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
-      <i class="far fa-file-alt"></i> Reviews
+      <i class="fas fa-info-circle"></i> Reviews
     <% end %>
-    <%= link_to clusters_admin_post_path(@post, k: 2), class: 'btn btn-sm btn-outline-secondary ml-1' do %>
-      <i class="fas fa-braille"></i> Clusters
+    <%= link_to visualization_admin_post_path(@post, k: 3), class: 'btn btn-sm btn-outline-secondary ml-1' do %>
+      <i class="fas fa-braille"></i> Visualization
     <% end %>
-    <div class="dropdown ml-1">
-      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-        <i class="fas fa-project-diagram"></i> Graph
-      </div>
-      <div class="dropdown-menu">
-        <%= link_to '2D' ,graph_admin_post_path(@post), class: 'dropdown-item'%>
-        <%= link_to '3D' ,graph3d_admin_post_path(@post), class: 'dropdown-item'%>
-      </div>
-    </div>
-    <div class="dropdown ml-1">
-      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-        <i class="fas fa-tasks"></i> Tasks
-      </div>
-      <div class="dropdown-menu">
-        <%= link_to admin_post_path(@post), method: :patch, remote: true, class: 'dropdown-item', id: "crawl-post-#{@post.dcard_id}-btn" do %>
-          <i class="fas fa-cloud-download-alt"></i> Crawl
-        <% end %>
-        <%= link_to sentiment_analysis_admin_post_path(@post), method: :post, remote: true, class: 'dropdown-item', id: "analysis-post-#{@post.dcard_id}-btn" do %>
-          <i class="fas fa-smile"></i> Sentiment Analysis
-        <% end %>
-        <%= link_to compute_embedding_admin_post_path(@post), method: :post, remote: true, class: 'dropdown-item', id: "compute-embedding-post-#{@post.dcard_id}-btn" do %>
-          <i class="fas fa-vector-square"></i> Compute Embedding
-        <% end %>
-        <div class="dropdown-header"><i class="fas fa-file-download"></i> Segment by</div>
-        <%= link_to 'jieba.txt', segment_admin_post_path(@post, method: 'jieba', format: :text), method: :post, class: 'dropdown-item' %>
-        <%= link_to 'snownlp.txt', segment_admin_post_path(@post, method: 'snownlp', format: :text), method: :post, class: 'dropdown-item' %>
-        <%= link_to 'pkuseg.txt', segment_admin_post_path(@post, method: 'pkuseg', format: :text), method: :post, class: 'dropdown-item' %>
-        <%= link_to 'jieba.xlsx', segment_admin_post_path(@post, method: 'jieba', format: :xlsx), method: :post, class: 'dropdown-item' %>
-        <%= link_to 'snownlp.xlsx', segment_admin_post_path(@post, method: 'snownlp', format: :xlsx), method: :post, class: 'dropdown-item' %>
-        <%= link_to 'pkuseg.xlsx', segment_admin_post_path(@post, method: 'pkuseg', format: :xlsx), method: :post, class: 'dropdown-item' %>
-      </div>
-    </div>
+    <%= render 'tasks_btn', post: @post, klass: 'ml-1' %>
     <%= link_to admin_post_path(@post), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
       <i class="fas fa-trash"></i>
     <% end %>

@@ -1,34 +1,24 @@
 <div class="container">
   <div class="btn-toolbar">
-    <%= link_to admin_post_path, class: 'btn btn-sm btn-outline-secondary' do %>
-      <i class="fas fa-redo"></i> Back
-    <% end %>
-    <div class="dropdown ml-2">
-      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-        Node Color
-      </div>
-      <div class="dropdown-menu">
-        <div class="dropdown-item" id="color-by-gender-btn"> By gender</div>
-        <div class="dropdown-item" id="color-by-sentiment-btn"> By sentiment</div>
-      </div>
+    <label>Color by</label>
+    <div class="btn-group btn-group-toggle ml-1 mr-2" data-toggle="buttons">
+      <div class="btn btn-sm btn-outline-secondary active" id="color-by-gender-btn"><input type="radio">Gender</div>
+      <div class="btn btn-sm btn-outline-secondary" id="color-by-sentiment-btn"><input type="radio">Sentiment</div>
+      <div class="btn btn-sm btn-outline-secondary" id="color-by-cluster-btn"><input type="radio">Cluster</div>
     </div>
-    <div class="dropdown ml-2">
-      <div class="btn btn-sm btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-        Node Size
-      </div>
-      <div class="dropdown-menu">
-        <div class="dropdown-item" id="size-by-like-btn">By like</div>
-        <div class="dropdown-item" id="size-by-length-btn">By length</div>
-      </div>
+    <label>Size by</label>
+    <div class="btn-group btn-group-toggle ml-1 mr-2" data-toggle="buttons">
+      <div class="btn btn-sm btn-outline-secondary active" id="size-by-like-btn"><input type="radio">Like</div>
+      <div class="btn btn-sm btn-outline-secondary" id="size-by-length-btn"><input type="radio">Length</div>
     </div>
   </div>
   <div class="row mt-2">
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-7">
       <div id="graph-container">
         <div id="graph"></div>
       </div>
     </div>
-    <div class="col-12 col-md-6">
+    <div class="col-12 col-md-5">
       <div id="detail"></div>
     </div>
   </div>
@@ -63,6 +53,7 @@
     window.addEventListener('resize', () => adjustGraphSize(graph))
     document.getElementById('color-by-gender-btn').addEventListener('click', () => graph.nodeColor('genderColor'))
     document.getElementById('color-by-sentiment-btn').addEventListener('click', () => graph.nodeColor('sentimentColor'))
+    document.getElementById('color-by-cluster-btn').addEventListener('click', () => graph.nodeColor('clusterColor'))
     document.getElementById('size-by-like-btn').addEventListener('click', () => graph.nodeVal('valLike'))
     document.getElementById('size-by-length-btn').addEventListener('click', () => graph.nodeVal('valLength'))
   }
