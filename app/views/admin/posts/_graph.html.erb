@@ -26,16 +26,16 @@
 <br>
 <script>
   var data = <%= sanitize force_graph_data_formater(post, comments).to_json %>
-
+  
   function adjustGraphSize(graph) {
     const container = document.getElementById('graph-container')
     graph.width(container.clientWidth).height(window.innerHeight - 100)
   }
-
+  
   function removeChildren(dom) {
     while (dom.firstChild) { dom.removeChild(dom.firstChild) }
   }
-
+  
   function setupGraph(graph, dom, data) {
     graph(dom).graphData(data)
       .backgroundColor('#f8f9fa')
