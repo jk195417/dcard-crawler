@@ -1,6 +1,6 @@
 <%= render 'admin/shared/header' %>
-<div class="container mb-2">
-  <div class="btn-toolbar mt-2">
+<div class="container my-2">
+  <div class="btn-toolbar">
     <%= link_to admin_post_path, class: 'btn btn-sm btn-outline-secondary mr-auto' do %>
       <i class="fas fa-redo"></i> Back
     <% end %>
@@ -35,22 +35,88 @@
       </p>
     <% end %>
   </div>
+  <hr>
   <div>
-    <label for="floor-range">Floor Range :</label>
-    <input type="text" id="floor-range" name="floor-range">
+    post analysis here
+  </div>
+  <hr>
+  <div>
+    <div class="mt-2">
+      <input type="text" id="floor-range" name="floor-range">
+    </div>
+    <div class="row mt-2">
+      <div class="col-12 col-md-7">
+        <div id="graph-container">
+          <div id="graph"></div>
+        </div>
+        <div class="btn-toolbar mt-2">
+          <label>Color by</label>
+          <div class="btn-group btn-group-toggle ml-1 mr-2" data-toggle="buttons">
+            <div class="btn btn-sm btn-outline-secondary active" id="color-by-gender-btn"><input type="radio">Gender</div>
+            <div class="btn btn-sm btn-outline-secondary" id="color-by-sentiment-btn"><input type="radio">Sentiment</div>
+            <div class="btn btn-sm btn-outline-secondary" id="color-by-cluster-btn"><input type="radio">Cluster</div>
+          </div>
+          <label>Size by</label>
+          <div class="btn-group btn-group-toggle ml-1 mr-2" data-toggle="buttons">
+            <div class="btn btn-sm btn-outline-secondary active" id="size-by-like-btn"><input type="radio">Like</div>
+            <div class="btn btn-sm btn-outline-secondary" id="size-by-length-btn"><input type="radio">Length</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12 col-md-5">
+        <div id="node-html"></div>
+      </div>
+    </div>
   </div>
 </div>
-<%= render 'graph', post: @post, comments: @comments %>
 <script>
-  // Add clusters colors to nodes
+  var data = <%= sanitize force_graph_data_formater(@post, @comments).to_json %>
   var clusters = <%= sanitize @clusters.to_json %> || []
+  var Graph = ForceGraph3D()
+  var graph = document.getElementById('graph')
+  var graphContainer = document.getElementById('graph-container')
+  var nodeHtml = document.getElementById('node-html')
+  
+  function adjustGraphSize() {
+    Graph.width(graphContainer.clientWidth).height(window.innerHeight - 100)
+  }
+  
+  function removeChildren(dom) {
+    while (dom.firstChild) { dom.removeChild(dom.firstChild) }
+  }
+  
+  function showNode(node) {
+    removeChildren(nodeHtml)
+    nodeHtml.insertAdjacentHTML('afterbegin', node.html);
+  }
+  
+  // Draw graph
+  Graph(document.getElementById('graph'))
+    .graphData(data)
+    .backgroundColor('#f8f9fa')
+    .nodeVal('valLike')
+    .nodeColor('genderColor')
+    .onNodeClick(node => showNode(node))
+    .linkWidth(2)
+  adjustGraphSize()
+  window.addEventListener('resize', () => adjustGraphSize())
+  
+  // Button to controll graph
+  document.getElementById('color-by-gender-btn').addEventListener('click', () => Graph.nodeColor('genderColor'))
+  document.getElementById('color-by-sentiment-btn').addEventListener('click', () => Graph.nodeColor('sentimentColor'))
+  document.getElementById('color-by-cluster-btn').addEventListener('click', () => Graph.nodeColor('clusterColor'))
+  document.getElementById('size-by-like-btn').addEventListener('click', () => Graph.nodeVal('valLike'))
+  document.getElementById('size-by-length-btn').addEventListener('click', () => Graph.nodeVal('valLength'))
+  
   function randomColor() {
     let r = (Math.random() * 255) | 0
     let g = (Math.random() * 255) | 0
     let b = (Math.random() * 255) | 0
     return `rgb(${r}, ${g}, ${b})`
   }
-  function generateClustersColors(){
+  
+  // Add clusters colors to nodes
+  document.getElementById('color-by-cluster-btn').addEventListener('click', () => {
     clusters.forEach(cluster => {
       let color = randomColor()
       cluster.forEach(point => {
@@ -58,13 +124,7 @@
         node["clusterColor"] = color
       })
     })
-  }
-  document.getElementById('color-by-cluster-btn').addEventListener('click', () => generateClustersColors())
-  
-  // Draw graph
-  var Graph = ForceGraph3D()
-  setupGraph(Graph, graph, data)
-  Graph.backgroundColor('#adb5bd')
+  })
   
   function showNodesInRange(min, max) {
     let { nodes, links } = data
@@ -81,7 +141,7 @@
     return {nodes, links}
   }
   
-  // Floor range
+  // ionRangeSlider for display nodes in specific floors
   $("#floor-range").ionRangeSlider({
     type: "double",
     grid: true,
@@ -97,3 +157,9 @@
     }
   })
 </script>
+<style>
+  img {
+    max-width: 100%;
+    max-height: 200px;
+  }
+</style>
