@@ -35,6 +35,10 @@
       </p>
     <% end %>
   </div>
+  <div>
+    <label for="floor-range">Floor Range :</label>
+    <input type="text" id="floor-range" name="floor-range">
+  </div>
 </div>
 <%= render 'graph', post: @post, comments: @comments %>
 <script>
@@ -61,4 +65,35 @@
   var Graph = ForceGraph3D()
   setupGraph(Graph, graph, data)
   Graph.backgroundColor('#adb5bd')
+  
+  function showNodesInRange(min, max) {
+    let { nodes, links } = data
+    // Remove links attached to node
+    links = links.filter(l => {
+      return l.source.floor >= min &&
+        l.source.floor <= max &&
+        l.target.floor >= min &&
+        l.target.floor <= max
+    })
+    // Remove nodes
+    nodes = nodes.filter(n => n.floor >= min && n.floor <= max)
+    Graph.graphData({ nodes, links })
+    return {nodes, links}
+  }
+  
+  // Floor range
+  $("#floor-range").ionRangeSlider({
+    type: "double",
+    grid: true,
+    min: 0,
+    max: data['nodes'][data['nodes'].length-1].floor,
+    from: 0,
+    to: data['nodes'][data['nodes'].length-1].floor,
+    prefix: "B",
+    onFinish: function (data) {
+      console.log(`from ${data.from}`)
+      console.log(`to ${data.to}`)
+      showNodesInRange(data.from, data.to)
+    }
+  })
 </script>
