@@ -1,6 +1,6 @@
 class Admin::PostsController < Admin::BaseController
   before_action :set_post, except: %i[index create]
-  before_action :set_comments, only: %i[show graph graph3d visualization]
+  before_action :set_comments, only: %i[show visualization]
 
   def index
     @q = Post.ransack(params[:q])
@@ -41,10 +41,6 @@ class Admin::PostsController < Admin::BaseController
     @post.destroy
     redirect_to admin_posts_url, notice: 'Post was successfully destroyed.'
   end
-
-  def graph; end
-
-  def graph3d; end
 
   def clusters
     @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 1 }

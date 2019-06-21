@@ -11,8 +11,6 @@ Rails.application.routes.draw do
 
     resources :forums, except: %i[new edit]
     resources :posts, except: %i[new edit] do
-      get :graph, on: :member
-      get :graph3d, on: :member
       get :clusters, on: :member
       get :visualization, on: :member
       post :segment, on: :member
