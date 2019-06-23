@@ -37,13 +37,16 @@
   </div>
   <hr>
   <div>
-    post analysis here
+    <h2>Sentiment Analysis</h2>
+    <div class="row">
+      <div id="sentiment-pie-chart-container" class="col-md-6 col-12"></div>
+      <div id="sentiment-column-chart-container" class="col-md-6 col-12"></div>
+    </div>
   </div>
   <hr>
   <div>
-    <div class="mt-2">
-      <input type="text" id="floor-range" name="floor-range">
-    </div>
+    <h2>Mention Graph</h2>
+    <input type="text" id="floor-range" name="floor-range">
     <div class="row mt-2">
       <div class="col-12 col-md-7">
         <div id="graph-container">
@@ -71,26 +74,114 @@
 </div>
 <script>
   var data = <%= sanitize force_graph_data_formater(@post, @comments).to_json %>
+  // Prepare pie chart data
+  var pieChartData = [
+    { name: 'negative', data: 0 },
+    { name: 'neutral', data: 0 },
+    { name: 'positive', data: 0 },
+    { name: 'null', data: 0 }
+  ]
+  data.nodes.forEach(node => {
+    if (node.sentiment === 'negative') {
+      pieChartData[0].data += 1
+    } else if (node.sentiment === 'neutral') {
+      pieChartData[1].data += 1
+    } else if (node.sentiment === 'positive') {
+      pieChartData[2].data += 1
+    } else {
+      pieChartData[3].data += 1
+    }
+  })
+  // Prepare column chart data
+  var nodesGroupByDay = _.groupBy(data.nodes, (node) => dayjs.unix(node.createdAt).startOf('day').format('YYYY-MM-DD HH:mm'))
+  var columnChartCategories = []
+  var columnChartColumnData = [
+    { name: 'negative', data: [] },
+    { name: 'neutral', data: [] },
+    { name: 'positive', data: [] },
+    { name: 'null', data: [] }
+  ]
+  var columnChartLineData = [
+    { name: 'total', data: [] }
+  ]
+  _.forEach(nodesGroupByDay, (array, key) => {
+    const length = columnChartCategories.push(key)
+    const index = length - 1
+    columnChartColumnData.forEach(column => {
+      column.data[index] = 0
+    })
+    columnChartLineData.forEach(line => {
+      line.data[index] = 0
+    })
+    array.forEach(node => {
+      columnChartLineData[0].data[index] += 1
+      if (node.sentiment === 'negative') {
+        columnChartColumnData[0].data[index] += 1
+      } else if (node.sentiment === 'neutral') {
+        columnChartColumnData[1].data[index] += 1
+      } else if (node.sentiment === 'positive') {
+        columnChartColumnData[2].data[index] += 1
+      } else {
+        columnChartColumnData[3].data[index] += 1
+      }
+    })
+  })
+  
+  var sentimentColors = [
+    "rgba(220,53,69,1)", // negative
+    "rgba(40,167,69,1)", // neutral
+    "rgba(0,123,255,1)", // positive
+    "rgba(108,117,125,1)" // null
+  ]
+  
+  // Draw pie chart
+  tui.chart.registerTheme('pie', { series: { colors: sentimentColors }})
+  tui.chart.pieChart(document.getElementById('sentiment-pie-chart-container'), {
+      categories: ['Comment'],
+      series: pieChartData
+    }, {
+      theme: 'pie'
+    }
+  )
+  
+  // Draw column chart
+  tui.chart.registerTheme('combo', { series: { column: { colors: sentimentColors }}})
+  tui.chart.comboChart(document.getElementById('sentiment-column-chart-container'), {
+      categories: columnChartCategories,
+      series: {
+        column: columnChartColumnData,
+        line: columnChartLineData
+      }
+    }, {
+      // options
+      xAxis: {
+        type: 'datetime',
+        dateFormat: 'YYYY-MM-DD HH:mm',
+        tickInterval: 'auto'
+      },
+      series: {
+        zoomable: true
+      },
+      theme: 'combo'
+    }
+  )
+  
+  // Draw graph
   var clusters = <%= sanitize @clusters.to_json %> || []
   var Graph = ForceGraph3D()
   var graph = document.getElementById('graph')
   var graphContainer = document.getElementById('graph-container')
   var nodeHtml = document.getElementById('node-html')
-  
   function adjustGraphSize() {
     Graph.width(graphContainer.clientWidth).height(window.innerHeight - 100)
   }
-  
   function removeChildren(dom) {
     while (dom.firstChild) { dom.removeChild(dom.firstChild) }
   }
-  
   function showNode(node) {
     removeChildren(nodeHtml)
     nodeHtml.insertAdjacentHTML('afterbegin', node.html);
   }
-  
-  // Draw graph
   Graph(document.getElementById('graph'))
     .graphData(data)
     .backgroundColor('#f8f9fa')
@@ -100,7 +191,6 @@
     .linkWidth(2)
   adjustGraphSize()
   window.addEventListener('resize', () => adjustGraphSize())
-  
   // Button to controll graph
   document.getElementById('color-by-gender-btn').addEventListener('click', () => Graph.nodeColor('genderColor'))
   document.getElementById('color-by-sentiment-btn').addEventListener('click', () => Graph.nodeColor('sentimentColor'))
@@ -108,14 +198,13 @@
   document.getElementById('size-by-like-btn').addEventListener('click', () => Graph.nodeVal('valLike'))
   document.getElementById('size-by-length-btn').addEventListener('click', () => Graph.nodeVal('valLength'))
   
+  // Add clusters colors to nodes
   function randomColor() {
     let r = (Math.random() * 255) | 0
     let g = (Math.random() * 255) | 0
     let b = (Math.random() * 255) | 0
     return `rgb(${r}, ${g}, ${b})`
   }
-  
-  // Add clusters colors to nodes
   document.getElementById('color-by-cluster-btn').addEventListener('click', () => {
     clusters.forEach(cluster => {
       let color = randomColor()
@@ -126,6 +215,7 @@
     })
   })
   
+  // ionRangeSlider for display nodes in specific floors
   function showNodesInRange(min, max) {
     let { nodes, links } = data
     // Remove links attached to node
@@ -140,8 +230,6 @@
     Graph.graphData({ nodes, links })
     return {nodes, links}
   }
-  
-  // ionRangeSlider for display nodes in specific floors
   $("#floor-range").ionRangeSlider({
     type: "double",
     grid: true,

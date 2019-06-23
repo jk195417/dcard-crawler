@@ -5,6 +5,8 @@
     "3d-force-graph": "^1.45.7",
     "dayjs": "^1.8.14",
     "force-graph": "^1.14.5",
-    "ion-rangeslider": "^2.3.0"
+    "ion-rangeslider": "^2.3.0",
+    "lodash": "^4.17.11",
+    "tui-chart": "^3.7.0"
   }
 }

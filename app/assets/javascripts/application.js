@@ -16,8 +16,13 @@
 //= require jquery3
 //= require popper
 //= require bootstrap-sprockets
+//
+// node_modules
+//= require lodash/lodash.min.js
+//= require tui-chart/dist/tui-chart-all.min.js
 //= require dayjs/dayjs.min.js
 //= require ion-rangeslider/js/ion.rangeSlider.min.js
 //= require 3d-force-graph/dist/3d-force-graph.min.js
 //= require force-graph/dist/force-graph.min.js
+//
 //= require_tree .
