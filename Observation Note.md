@@ -56,3 +56,17 @@ these forum might have higher echo chamber effect in comments
 -   book
 -   language
 -   sex
+
+# Bert 模型
+
+1. like
+2. dislike
+3. hate
+
+比起 like，dislike 與 hate 更相似
+
+1. 喜歡
+2. 不喜歡
+3. 討厭
+
+結果卻是 喜歡 與 不喜歡 更相似
