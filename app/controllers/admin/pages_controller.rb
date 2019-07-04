@@ -15,7 +15,7 @@ class Admin::PagesController < Admin::BaseController
     query = params[:query]
     forum = params[:forum]
     posts_json = if query.blank?
-                   Dcard::Post.get(popular: true)
+                   Dcard::Post.get(popular: true, forum: forum)
                  else
                    Dcard::Post.search(query: query, forum: forum)
                  end

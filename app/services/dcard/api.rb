@@ -21,7 +21,7 @@ class Dcard::API
   end
 
   def self.posts(forum: nil, **options)
-    if forum
+    if forum.present?
       "#{@@host}/forums/#{forum}/posts?#{options_query(options)}"
     else
       "#{@@host}/posts?#{options_query(options)}"
