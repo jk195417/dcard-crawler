@@ -75,8 +75,8 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def compute_embedding
-    Bert::GetPostEmbeddingJob.perform_later(@post.id)
-    @alert = { notice: "Scheduling compute embedding of post #{@post.id} and its comments." }
+    Bert::GetPostEmbeddingJob.perform_later(@post)
+    @alert = { notice: "Scheduling compute embedding of Post #{@post.dcard_id} and its comments." }
     respond_to do |format|
       format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
       format.js

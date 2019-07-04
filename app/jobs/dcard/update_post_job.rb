@@ -20,6 +20,6 @@ class Dcard::UpdatePostJob < ApplicationJob
     Dcard::GetPostCommentsJob.perform_now(post)
     # Sentiment analyzing and word embedding analyzing
     Baidu::GetPostSentimentJob.perform_later(post)
-    Bert::GetPostEmbeddingJob.perform_later(post.id)
+    Bert::GetPostEmbeddingJob.perform_later(post)
   end
 end
