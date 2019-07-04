@@ -66,8 +66,8 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def sentiment_analysis
-    Baidu::GetPostSentimentJob.perform_later(@post.id)
-    @alert = { notice: "Scheduling sentiment analysis of post #{@post.id} and its comments." }
+    Baidu::GetPostSentimentJob.perform_later(@post)
+    @alert = { notice: "Scheduling sentiment analysis of Post #{@post.dcard_id} and its comments." }
     respond_to do |format|
       format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
       format.js
