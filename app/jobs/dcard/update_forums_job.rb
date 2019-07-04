@@ -6,10 +6,12 @@ class Dcard::UpdateForumsJob < ApplicationJob
 
   def perform
     forums = Dcard::Forum.to_records(Dcard::Forum.get)
-    result = ::Forum.import(forums, on_duplicate_key_update: {
-                              conflict_target: [:alias],
-                              columns: ::Forum.column_names - %w[id alias posts_count created_at updated_at]
-                            })
-    Rails.logger.info "Forum #{result.ids} updated."
+    ::Forum.import(forums, on_duplicate_key_update: { conflict_target: [:alias], columns: valid_column_names })
+  end
+
+  private
+
+  def valid_column_names
+    ::Forum.column_names - %w[id alias posts_count created_at updated_at]
   end
 end
