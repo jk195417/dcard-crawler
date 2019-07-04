@@ -1,11 +1,10 @@
 # Usage :
-# Dcard::GetPostCommentsJob.perform_now(post.id)
+# Dcard::GetPostCommentsJob.perform_now(post)
 
 class Dcard::GetPostCommentsJob < ApplicationJob
   queue_as :default
 
-  def perform(id)
-    post = ::Post.find id
+  def perform(post)
     comments = []
     latest_comment = post.comments.select(:floor).order(floor: :desc).first
     loop do
@@ -16,7 +15,7 @@ class Dcard::GetPostCommentsJob < ApplicationJob
       comments += new_comments
       latest_comment = new_comments.last
     end
-    Rails.logger.info "Can\'t find new comments at Post #{post.dcard_id}." and return if comments.empty?
+    Rails.logger.info { "Can\'t find new comments at Post #{post.dcard_id}." } && return if comments.empty?
 
     comments_count = 0
     comments.each do |comment|
