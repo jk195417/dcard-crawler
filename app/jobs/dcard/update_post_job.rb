@@ -19,5 +19,8 @@ class Dcard::UpdatePostJob < ApplicationJob
     post.update! attributes
     Rails.logger.info "Post #{post.dcard_id} updated."
     Dcard::GetPostCommentsJob.perform_now(post.id)
+    # Sentiment analyzing and word embedding analyzing
+    Baidu::GetPostSentimentJob.perform_later(post.id)
+    Bert::GetPostEmbeddingJob.perform_later(post.id)
   end
 end
