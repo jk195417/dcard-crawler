@@ -1,12 +1,11 @@
 # Usage :
-# Dcard::GetForumPostsJob.perform_now(forum.id)
-# Dcard::GetForumPostsJob.perform_now(forum.id, true)
+# Dcard::GetForumPostsJob.perform_now(forum)
+# Dcard::GetForumPostsJob.perform_now(forum, true)
 
 class Dcard::GetForumPostsJob < ApplicationJob
   queue_as :default
 
-  def perform(id, recent = false)
-    forum = ::Forum.find id
+  def perform(forum, recent = false)
     posts_json = if recent
                    newest = forum.posts.select(:dcard_id).order(dcard_id: :desc).first
                    Dcard::Post.get(forum: forum.alias, after: newest&.dcard_id)

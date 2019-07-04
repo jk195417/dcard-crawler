@@ -14,7 +14,7 @@ class Admin::ForumsController < Admin::BaseController
   end
 
   def update
-    Dcard::GetForumPostsJob.perform_later(@forum.id)
+    Dcard::GetForumPostsJob.perform_later(@forum)
     @alert = { notice: "Crawling posts of forum #{@forum.id}, you can refresh your browser to read it." }
     respond_to do |format|
       format.html { redirect_back({ fallback_location: admin_posts_path }.merge(@alert)) }
