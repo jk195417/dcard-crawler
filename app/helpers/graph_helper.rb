@@ -30,6 +30,7 @@ module GraphHelper
     comments.each do |comment|
       result[:links] << force_graph_link(comment) if comment.mentions.empty?
       comment.mentions.each do |mention|
+        mention.upcase!
         node_index = result[:nodes].index { |node| node[:id] == mention }
         next unless node_index
 
