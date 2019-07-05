@@ -1,12 +1,11 @@
 # Usage :
-# OpinionesClusterJob.perform_now(post.id, 6)
+# OpinionesClusterJob.perform_now(post, 6)
 
 class OpinionesClusterJob < ApplicationJob
   queue_as :default
 
-  def perform(id, k = 2)
+  def perform(post, k = 2)
     # find k clusters in data
-    post = Post.find id
     comments = post.comments.where.not(embedding: nil).order(:floor)
     post_and_comments = [post] + comments
     data, labels = generate_data_and_labels post_and_comments

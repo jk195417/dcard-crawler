@@ -43,12 +43,12 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def clusters
-    @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 1 }
+    @kmeans = OpinionesClusterJob.perform_now @post, params.fetch(:k) { 1 }
     @clusters = @kmeans.clusters.map { |cluster| @post.comments.where(floor: cluster.points.map(&:label)).includes(:sentiment).order(floor: :asc) }
   end
 
   def visualization
-    @kmeans = OpinionesClusterJob.perform_now @post.id, params.fetch(:k) { 1 }
+    @kmeans = OpinionesClusterJob.perform_now @post, params.fetch(:k) { 1 }
     @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
   end
 
