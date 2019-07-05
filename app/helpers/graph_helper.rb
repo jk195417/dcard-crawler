@@ -7,8 +7,8 @@ module GraphHelper
       sentiment: post_or_comment.sentiment&.sentiment,
       confidence: post_or_comment.sentiment&.confidence,
       createdAt: post_or_comment.created_at.strftime("%s").to_i,
-      valLike: Math.log(post_or_comment.like_count || 1) + 1,
-      valLength: Math.log(post_or_comment.content&.size || 1) + 1,
+      valLike: post_or_comment.like_count || 1,
+      valLength: post_or_comment.content&.size || 1,
       genderColor: gender_color(post_or_comment.gender),
       sentimentColor: sentiment_color(post_or_comment.sentiment&.sentiment, opacity: post_or_comment.sentiment&.confidence),
       html: dcard_html(post_or_comment)
