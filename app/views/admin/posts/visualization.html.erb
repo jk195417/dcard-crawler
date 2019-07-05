@@ -11,7 +11,7 @@
       <%= form_tag visualization_admin_post_path(@post), method: :get, class: "form-inline" do %>
         <div class="form-group mr-2">
           <label class="mr-1">K :</label>
-          <%= number_field_tag :k, params[:k], class: "form-control" %>
+          <%= number_field_tag :k, @kmeans.k, class: "form-control" %>
         </div>
         <button type="submit" class="btn btn-sm btn-outline-secondary">Cluster</button>
       <% end %>

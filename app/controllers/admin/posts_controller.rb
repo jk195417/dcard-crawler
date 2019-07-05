@@ -48,7 +48,11 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def visualization
-    @kmeans = OpinionsClusterJob.perform_now @post, params.fetch(:k) { 1 }
+    @kmeans = if params[:k]
+                OpinionsClusterJob.perform_now @post, params[:k]
+              else
+                BestOpinionsClusterJob.perform_now(@post)
+              end
     @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
   end
 
