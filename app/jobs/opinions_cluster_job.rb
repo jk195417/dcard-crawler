@@ -1,7 +1,7 @@
 # Usage :
-# OpinionesClusterJob.perform_now(post, 6)
+# OpinionsClusterJob.perform_now(post, 6)
 
-class OpinionesClusterJob < ApplicationJob
+class OpinionsClusterJob < ApplicationJob
   queue_as :default
 
   def perform(post, k = 2)
@@ -9,7 +9,7 @@ class OpinionesClusterJob < ApplicationJob
     comments = post.comments.where.not(embedding: nil).order(:floor)
     post_and_comments = [post] + comments
     data, labels = generate_data_and_labels post_and_comments
-    return nil if data[0].nil? || data.size <= 1
+    raise "Post #{post.id} didn\'t have any embedding" if data[0].nil? || data.size <= 1
 
     kmeans = KMeansClusterer.run k.to_i, data, labels: labels
     kmeans
