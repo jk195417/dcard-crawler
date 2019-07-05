@@ -22,12 +22,6 @@ create Postgres database
 $ rails db:setup
 ```
 
-Load opinion words from ANTUSD dic: `lib/ANTUSD/opinion_words.csv`
-
-```bash
-$ rails antusd:load # 讀取 ANTUSD
-```
-
 ### Setup text analysis services (optional)
 
 - Word embeddings https://github.com/jk195417/bert-as-service-starter
@@ -40,7 +34,6 @@ Rake tasks
 ```sh
 rails dcard:get_comments # 取得已抓取貼文的新留言
 rails dcard:get_posts # 持續取得新貼文（非學校）
-rails antusd:reload # 重新讀取 ANTUSD
 ```
 
 Sidekiq
