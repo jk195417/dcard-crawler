@@ -1,8 +1,0 @@
-<%= simple_form_for(@review) do |f| %>
-  <%= f.error_notification %>
-  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
-  <%= f.input :user_id, as: :hidden  %>
-  <%= f.input :post_id, as: :hidden %>
-  <%= f.input :echo_chamber, collection: Review.echo_chambers.keys, as: :radio_buttons, include_blank: true %>
-  <%= f.button :submit %>
-<% end %>

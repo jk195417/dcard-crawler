@@ -9,7 +9,7 @@ class Dcard::UpdatePostJob < ApplicationJob
     begin
       new_post = crawler.to_record # 可能因為被刪除的留言導致 TypeError
       attributes = new_post.attributes
-      %w[id forum_id comments_count reviews_count].each { |key| attributes.delete(key) }
+      %w[id forum_id comments_count].each { |key| attributes.delete(key) }
     rescue TypeError
       attributes = { removed: crawler.data.fetch('reason') { 'removed' } } if crawler.data.fetch('error') { nil }.to_i == 1202
     end

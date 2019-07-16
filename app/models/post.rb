@@ -4,7 +4,6 @@ class Post < ApplicationRecord
   belongs_to :forum, counter_cache: true
   has_one :sentiment, as: :sentimental, dependent: :destroy
   has_many :comments, dependent: :destroy
-  has_many :reviews, dependent: :destroy
 
   scope :not_removed, -> { where(removed: nil) }
   scope :crawled, -> { where('comment_count = comments_count') }

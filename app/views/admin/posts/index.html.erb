@@ -24,18 +24,6 @@
             </div>
           </div>
         </div>
-        <div class="form-group col-2">
-          <label>Reviews</label>
-          <div class="d-flex align-items-center">
-            <div class="mr-1">
-              <%= f.number_field :reviews_count_gteq, class: 'form-control', placeholder: '>=' %>
-            </div>
-            ~
-            <div class="ml-1">
-              <%= f.number_field :reviews_count_lteq, class: 'form-control', placeholder: '<=' %>
-            </div>
-          </div>
-        </div>
         <div class="btn-group col-auto">
           <%= f.button class: 'btn btn-sm btn-outline-secondary' do %>
             <i class="fas fa-search"></i>
@@ -66,11 +54,6 @@
             <% end %>
           </th>
           <th>
-            <%= sort_link @q, :reviews_count do %>
-              Reviews
-            <% end %>
-          </th>
-          <th>
             <div id="crawl-posts-btn" class="btn btn-sm btn-outline-secondary mr-1 mt-1">
               <i class="fas fa-cloud-download-alt"></i> Crawl (this page)
             </div>
@@ -94,14 +77,10 @@
               <% end %>
             </td>
             <td><%= post.comments_count %> / <%= post.comment_count %></td>
-            <td><%= post.reviews_count %></td>
             <td class="btn-toolbar">
               <div class="btn-group mr-1 my-1">
                 <%= link_to admin_post_path(post), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-info-circle"></i>
-                <% end %>
-                <%= link_to admin_reviews_path(q: { post_id_eq: post.id }), class: 'btn btn-sm btn-outline-secondary' do %>
-                  <i class="fas fa-info-circle"></i> Reviews
                 <% end %>
                 <%= link_to visualization_admin_post_path(post), class: 'btn btn-sm btn-outline-secondary' do %>
                   <i class="fas fa-braille"></i> Visualization
