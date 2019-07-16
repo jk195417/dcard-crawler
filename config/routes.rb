@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   devise_for :users
   namespace :admin do
     require 'sidekiq/web'
-    authenticate :user, ->(u) { u.id == 1 } do
+    authenticate :user, ->(user) { user.is_admin? } do
       mount Sidekiq::Web => '/sidekiq'
     end
     get 'statistics', 'explore', controller: 'pages'

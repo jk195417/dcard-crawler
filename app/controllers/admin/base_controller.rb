@@ -4,9 +4,8 @@ class Admin::BaseController < ApplicationController
 
   private
 
-  # admin is first user, user.id == 1
   def auth_admin
-    return if current_user.id == 1
+    return if current_user.is_admin?
 
     redirect_to root_path, alert: 'You are not admin!'
   end
