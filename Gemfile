@@ -21,13 +21,12 @@ gem 'font-awesome-sass', '~> 5.8.1' # Icon
 gem 'http' # HTTP Client
 gem 'jquery-rails' # Jquery 3 for Bootstrap 4
 gem 'kaminari' # ActiveRecord Paginator
+gem 'kmeans-clusterer' # K means
 gem 'pg' # Postgres Database
 gem 'ransack' # ActiveRecord searching
 gem 'rubyzip', '>= 1.2.1' # Zip file
 gem 'sidekiq' # Threading workers
 gem 'simple_form' # Form Builder
-gem 'kmeans-clusterer' # K means
-
 
 # defalut but useless gem
 # gem 'sqlite3' # Use sqlite3 as the database for Active Record
@@ -44,6 +43,8 @@ group :development, :test do
 end
 
 group :development do
+  # ERD
+  gem 'rails-erd'
   # Debugger
   gem 'pry-rails'
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
