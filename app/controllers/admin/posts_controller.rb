@@ -48,12 +48,13 @@ class Admin::PostsController < Admin::BaseController
   end
 
   def visualization
-    @kmeans = if params[:k]
-                OpinionsClusterJob.perform_now @post, params[:k]
-              else
-                BestOpinionsClusterJob.perform_now(@post)
-              end
-    @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
+    if params[:k]
+      @kmeans = OpinionsClusterJob.perform_now @post, params[:k]
+      @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
+    else
+      k = BestOpinionsClusterJob.perform_now(@post).k
+      redirect_to visualization_admin_post_path(@post, k: k)
+    end
   rescue StandardError => e
     flash[:alert] = e
     @kmeans = nil

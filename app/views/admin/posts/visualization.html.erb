@@ -13,7 +13,12 @@
           <label class="mr-1">K :</label>
           <%= number_field_tag :k, @kmeans.k, class: "form-control" %>
         </div>
-        <button type="submit" class="btn btn-sm btn-outline-secondary">Cluster</button>
+        <button type="submit" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-paper-plane"></i> Cluster
+        </button>
+        <%= link_to visualization_admin_post_path(@post), class: 'btn btn-sm btn-outline-secondary ml-2' do %>
+          <i class="fas fa-braille"></i> Best K
+        <% end %>
       <% end %>
       <p class="text-muted small">Silhouette score: <%= @kmeans.silhouette.round(5) %></p>
     <% else %>
@@ -74,6 +79,17 @@
 </div>
 <script>
   var data = <%= sanitize force_graph_data_formater(@post, @comments).to_json %>
+  function dates(from, to) {
+    const fromDay = dayjs(from)
+    const toDay = dayjs(to)
+    const result = []
+    const days = toDay.diff(fromDay, 'day')
+    for (let i = 0; i <= days; i++) {
+      result.push(fromDay.add(i, 'day').format('YYYY-MM-DD HH:mm'))
+    }
+    return result
+  }
+
   // Prepare pie chart data
   var pieChartData = [
     { name: 'negative', data: 0 },
@@ -94,7 +110,7 @@
   })
   // Prepare column chart data
   var nodesGroupByDay = _.groupBy(data.nodes, (node) => dayjs.unix(node.createdAt).startOf('day').format('YYYY-MM-DD HH:mm'))
-  var columnChartCategories = []
+  var columnChartCategories = dates(_.findKey(nodesGroupByDay), _.findLastKey(nodesGroupByDay))
   var columnChartColumnData = [
     { name: 'negative', data: [] },
     { name: 'neutral', data: [] },
@@ -104,16 +120,16 @@
   var columnChartLineData = [
     { name: 'total', data: [] }
   ]
-  _.forEach(nodesGroupByDay, (array, key) => {
-    const length = columnChartCategories.push(key)
-    const index = length - 1
+
+  _.forEach(columnChartCategories, (day, index) => {
     columnChartColumnData.forEach(column => {
       column.data[index] = 0
     })
     columnChartLineData.forEach(line => {
       line.data[index] = 0
     })
-    array.forEach(node => {
+    day
+    _.forEach(nodesGroupByDay[day], node => {
       columnChartLineData[0].data[index] += 1
       if (node.sentiment === 'negative') {
         columnChartColumnData[0].data[index] += 1
@@ -126,14 +142,14 @@
       }
     })
   })
-  
+
   var sentimentColors = [
     "rgba(220,53,69,1)", // negative
     "rgba(40,167,69,1)", // neutral
     "rgba(0,123,255,1)", // positive
     "rgba(108,117,125,1)" // null
   ]
-  
+
   // Draw pie chart
   tui.chart.registerTheme('pie', { series: { colors: sentimentColors }})
   tui.chart.pieChart(document.getElementById('sentiment-pie-chart-container'), {
@@ -143,7 +159,7 @@
       theme: 'pie'
     }
   )
-  
+
   // Draw column chart
   tui.chart.registerTheme('combo', { series: { column: { colors: sentimentColors }}})
   tui.chart.comboChart(document.getElementById('sentiment-column-chart-container'), {
@@ -156,8 +172,7 @@
       // options
       xAxis: {
         type: 'datetime',
-        dateFormat: 'YYYY-MM-DD HH:mm',
-        tickInterval: 'auto'
+        dateFormat: 'YYYY-MM-DD'
       },
       series: {
         zoomable: true
@@ -165,7 +180,7 @@
       theme: 'combo'
     }
   )
-  
+
   // Draw graph
   var clusters = <%= sanitize @clusters.to_json %> || []
   var Graph = ForceGraph3D()
@@ -197,7 +212,7 @@
   document.getElementById('color-by-cluster-btn').addEventListener('click', () => Graph.nodeColor('clusterColor'))
   document.getElementById('size-by-like-btn').addEventListener('click', () => Graph.nodeVal('valLike'))
   document.getElementById('size-by-length-btn').addEventListener('click', () => Graph.nodeVal('valLength'))
-  
+
   // Add clusters colors to nodes
   function randomColor() {
     let r = (Math.random() * 255) | 0
@@ -214,7 +229,7 @@
       })
     })
   })
-  
+
   // ionRangeSlider for display nodes in specific floors
   function showNodesInRange(min, max) {
     let { nodes, links } = data
