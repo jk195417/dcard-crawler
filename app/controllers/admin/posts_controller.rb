@@ -54,6 +54,9 @@ class Admin::PostsController < Admin::BaseController
                 BestOpinionsClusterJob.perform_now(@post)
               end
     @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
+  rescue StandardError => e
+    flash[:alert] = e
+    @kmeans = nil
   end
 
   def segment
