@@ -7,21 +7,8 @@
     <%= render 'tasks_btn', post: @post %>
   </div>
   <div class="mt-2">
-    <% if @kmeans %>
-      <%= form_tag visualization_admin_post_path(@post), method: :get, class: "form-inline" do %>
-        <div class="form-group mr-2">
-          <label class="mr-1">K :</label>
-          <%= number_field_tag :k, @kmeans.k, class: "form-control" %>
-        </div>
-        <button type="submit" class="btn btn-sm btn-outline-secondary">
-          <i class="fas fa-paper-plane"></i> Cluster
-        </button>
-        <%= link_to visualization_admin_post_path(@post), class: 'btn btn-sm btn-outline-secondary ml-2' do %>
-          <i class="fas fa-braille"></i> Best K
-        <% end %>
-      <% end %>
-      <p class="text-muted small">Silhouette score: <%= @kmeans.silhouette.round(5) %></p>
-    <% else %>
+    <p><%= link_to @post.forum_name, admin_forum_path(@post.forum_id) %> / <%= @post.title %></p>
+    <% unless @kmeans.present? %>
       <p>
         You need to
         <%= link_to compute_embedding_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "compute-embedding-post-#{@post.dcard_id}-btn" do %>
@@ -51,6 +38,21 @@
   <hr>
   <div>
     <h2>Mention Graph</h2>
+    <% if @kmeans %>
+      <%= form_tag visualization_admin_post_path(@post), method: :get, class: "form-inline" do %>
+        <div class="form-group mr-2">
+          <label class="mr-1">K :</label>
+          <%= number_field_tag :k, @kmeans.k, class: "form-control" %>
+        </div>
+        <button type="submit" class="btn btn-sm btn-outline-secondary">
+          <i class="fas fa-paper-plane"></i> Cluster
+        </button>
+        <%= link_to visualization_admin_post_path(@post), class: 'btn btn-sm btn-outline-secondary ml-2' do %>
+          <i class="fas fa-braille"></i> Best K
+        <% end %>
+      <% end %>
+      <p class="text-muted small">Silhouette score: <%= @kmeans.silhouette.round(5) %></p>
+    <% end %>
     <input type="text" id="floor-range" name="floor-range">
     <div class="row mt-2">
       <div class="col-12 col-md-7">

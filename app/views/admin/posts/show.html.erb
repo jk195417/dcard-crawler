@@ -12,6 +12,7 @@
       <i class="fas fa-trash"></i>
     <% end %>
   </div>
+  <p class="mt-2"><%= link_to @post.forum_name, admin_forum_path(@post.forum_id) %> / <%= @post.title %></p>
   <div class="mt-2">
     <%= paginate @comments %>
     <%= render 'posts/post', post: @post, comments: @comments %>

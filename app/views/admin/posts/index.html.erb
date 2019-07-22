@@ -44,12 +44,15 @@
     <table class="table mt-2">
       <thead class="thead-light">
         <tr>
-          <th>Forum / Title</th>
+          <th>
+            Forum / Title
+            <br>
+            <%= sort_link @q, :created_at do %>
+              Created At
+            <% end %>
+          </th>
           <th>
             <%= sort_link @q, :comments_count do %>
-              Crawled
-            <% end %> /
-            <%= sort_link @q, :comment_count do %>
               Comments
             <% end %>
           </th>
@@ -75,6 +78,8 @@
               <%= link_to post.dcard_url, target: :_blank do %>
                 <i class="fas fa-external-link-alt"></i>
               <% end %>
+              <br>
+              <%= time_formatter post.created_at %>
             </td>
             <td><%= post.comments_count %> / <%= post.comment_count %></td>
             <td class="btn-toolbar">
