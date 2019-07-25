@@ -16,7 +16,7 @@ Edit credentials
 $ EDITOR="sublime --wait" bin/rails credentials:edit
 ```
 
-create Postgres database
+Create PostgreSQL database
 
 ```bash
 $ rails db:setup
