@@ -1,5 +1,7 @@
 學術用途，爬取 Dcard 上的文章與留言做數據分析。
 
+論文請見 https://etd.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0805119-133659
+
 ## Setup
 
 參考 <https://github.com/jk195417/dcard-crawler/wiki#建立實驗環境>
