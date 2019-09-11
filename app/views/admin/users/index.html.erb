@@ -1,4 +1,4 @@
-<%= render 'admin/shared/header' %>
+<%= render 'shared/tabs' %>
 <div class="container">
   <div class="card">
     <div class="card-body">
@@ -26,7 +26,8 @@
       <tr>
         <th>ID</th>
         <th>Email</th>
-        <th></th>
+        <th>Is scholar</th>
+        <th>Delete account</th>
       </tr>
     </thead>
     <tbody>
@@ -34,6 +35,17 @@
         <tr>
           <td><%= user.id %></td>
           <td><%= user.email %></td>
+          <td>
+            <% if user.is_scholar %>
+              <%= link_to admin_user_path(user), method: :patch, remote: true, class: 'btn btn-sm btn-outline-primary', id: "update-user-#{user.id}-btn" do %>
+                <i class="fas fa-check"></i>
+              <% end %>
+            <% else %>
+              <%= link_to admin_user_path(user), method: :patch, remote: true, class: 'btn btn-sm btn-outline-danger', id: "update-user-#{user.id}-btn" do %>
+                <i class="fas fa-times"></i>
+              <% end %>
+            <% end %>
+          </td>
           <td>
             <%= link_to admin_user_path(user), class: 'btn btn-sm btn-outline-danger', method: :delete, data: { confirm: 'Are you sure?' } do %>
               <i class="fas fa-trash"></i>

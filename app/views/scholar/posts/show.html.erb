@@ -1,0 +1,21 @@
+<%= render 'shared/tabs' %>
+<div class="container">
+  <div class="btn-toolbar mt-2">
+    <%= link_to scholar_posts_path, class: 'btn btn-sm btn-outline-secondary' do %>
+      <i class="fas fa-redo"></i> Back
+    <% end %>
+    <%= link_to visualization_scholar_post_path(@post, k: 1), class: 'btn btn-sm btn-outline-secondary ml-auto' do %>
+      <i class="fas fa-braille"></i> Visualization
+    <% end %>
+    <%= render 'tasks_btn', post: @post, klass: 'ml-1' %>
+    <%= link_to scholar_post_path(@post), class: 'btn btn-sm btn-outline-danger ml-1', method: :delete, data: { confirm: 'Are you sure?' } do %>
+      <i class="fas fa-trash"></i>
+    <% end %>
+  </div>
+  <p class="mt-2"><%= link_to @post.forum_name, scholar_forum_path(@post.forum_id) %> / <%= @post.title %></p>
+  <div class="mt-2">
+    <%= paginate @comments %>
+    <%= render 'post', post: @post, comments: @comments %>
+    <%= paginate @comments %>
+  </div>
+</div>

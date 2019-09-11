@@ -1,6 +1,6 @@
-<%= render 'admin/shared/header' %>
+<%= render 'shared/tabs' %>
 <div class="container">
-  <%= form_tag admin_explore_path, method: :get do %>
+  <%= form_tag scholar_explore_path, method: :get do %>
     <div class="input-group">
       <%= text_field_tag(:query, params[:query], placeholder: 'Search Keyword', class: 'form-control') %>
       <%= select_tag :forum, options_from_collection_for_select(Forum.all.order(:id), :alias, :name, params[:forum]), include_blank: true, class: 'form-control' %>
@@ -40,7 +40,7 @@
               <i class="ml-2 far fa-heart"></i> <%= post.like_count %>
             </td>
             <td>
-              <%= link_to admin_posts_path(post: { dcard_id: post.dcard_id, forum_name: post.forum_name }), method: :post, remote: true, class: 'btn btn-sm btn-outline-primary', id: "crawl-post-#{post.dcard_id}-btn" do %>
+              <%= link_to scholar_posts_path(post: { dcard_id: post.dcard_id, forum_name: post.forum_name }), method: :post, remote: true, class: 'btn btn-sm btn-outline-primary', id: "crawl-post-#{post.dcard_id}-btn" do %>
                 <i class="fas fa-cloud-download-alt"></i> Crawl
               <% end %>
             </td>

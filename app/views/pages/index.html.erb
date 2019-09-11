@@ -1,9 +1,15 @@
 <%= render 'shared/logo' %>
 <div class="d-flex justify-content-around mt-2">
-  <%= link_to admin_explore_path, class: 'card btn btn-outline-info' do %>
+  <%= link_to scholar_explore_path, class: 'card btn btn-outline-info' do %>
     <div class="card-body p-5">
-      <h5 class="card-title">Crawl Post</h5>
-      <div class="card-text">Admin Only</div>
+      <h5 class="card-title">Crawl Posts</h5>
+      <div class="card-text"></div>
+    </div>
+  <% end %>
+  <%= link_to admin_users_path, class: 'card btn btn-outline-info' do %>
+    <div class="card-body p-5">
+      <h5 class="card-title">Manage Users</h5>
+      <div class="card-text"></div>
     </div>
   <% end %>
 </div>

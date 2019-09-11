@@ -1,0 +1,6 @@
+<%= render 'shared/alert', alert: @alert %>
+<% if @user.is_scholar %>
+  $('#update-user-<%= @user.id %>-btn').removeClass('btn-outline-danger').addClass('btn-outline-primary').html('<i class="fas fa-check"></i>')
+<% else %>
+  $('#update-user-<%= @user.id %>-btn').removeClass('btn-outline-primary').addClass('btn-outline-danger').html('<i class="fas fa-times"></i>')
+<% end %>

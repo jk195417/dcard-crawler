@@ -1,17 +1,17 @@
-<%= render 'admin/shared/header' %>
+<%= render 'shared/tabs' %>
 <div class="container my-2">
   <div class="btn-toolbar">
-    <%= link_to admin_post_path, class: 'btn btn-sm btn-outline-secondary mr-auto' do %>
+    <%= link_to scholar_post_path, class: 'btn btn-sm btn-outline-secondary mr-auto' do %>
       <i class="fas fa-redo"></i> Back
     <% end %>
     <%= render 'tasks_btn', post: @post %>
   </div>
   <div class="mt-2">
-    <p><%= link_to @post.forum_name, admin_forum_path(@post.forum_id) %> / <%= @post.title %></p>
+    <p><%= link_to @post.forum_name, scholar_forum_path(@post.forum_id) %> / <%= @post.title %></p>
     <% unless @kmeans.present? %>
       <p>
         You need to
-        <%= link_to compute_embedding_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "compute-embedding-post-#{@post.dcard_id}-btn" do %>
+        <%= link_to compute_embedding_scholar_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "compute-embedding-post-#{@post.dcard_id}-btn" do %>
           <i class="fas fa-vector-square"></i> Compute Embedding
         <% end %>
         first
@@ -20,7 +20,7 @@
     <% unless @post.sentiment.present? %>
       <p>
         You need to
-        <%= link_to sentiment_analysis_admin_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "sentiment-analysis-post-#{@post.dcard_id}-btn" do %>
+        <%= link_to sentiment_analysis_scholar_post_path(@post), method: :post, remote: true, class: 'btn btn-sm btn-outline-warning', id: "sentiment-analysis-post-#{@post.dcard_id}-btn" do %>
           <i class="fas fa-smile"></i> Sentiment Analysis
         <% end %>
         first
@@ -39,7 +39,7 @@
   <div>
     <h2>Mention Graph</h2>
     <% if @kmeans %>
-      <%= form_tag visualization_admin_post_path(@post), method: :get, class: "form-inline" do %>
+      <%= form_tag visualization_scholar_post_path(@post), method: :get, class: "form-inline" do %>
         <div class="form-group mr-2">
           <label class="mr-1">K :</label>
           <%= number_field_tag :k, @kmeans.k, class: "form-control" %>
@@ -47,7 +47,7 @@
         <button type="submit" class="btn btn-sm btn-outline-secondary">
           <i class="fas fa-paper-plane"></i> Cluster
         </button>
-        <%= link_to visualization_admin_post_path(@post), class: 'btn btn-sm btn-outline-secondary ml-2' do %>
+        <%= link_to visualization_scholar_post_path(@post), class: 'btn btn-sm btn-outline-secondary ml-2' do %>
           <i class="fas fa-braille"></i> Best K
         <% end %>
       <% end %>
@@ -91,7 +91,7 @@
     }
     return result
   }
-
+  
   // Prepare pie chart data
   var pieChartData = [
     { name: 'negative', data: 0 },
@@ -122,7 +122,7 @@
   var columnChartLineData = [
     { name: 'total', data: [] }
   ]
-
+  
   _.forEach(columnChartCategories, (day, index) => {
     columnChartColumnData.forEach(column => {
       column.data[index] = 0
@@ -144,14 +144,14 @@
       }
     })
   })
-
+  
   var sentimentColors = [
     "rgba(220,53,69,1)", // negative
     "rgba(40,167,69,1)", // neutral
     "rgba(0,123,255,1)", // positive
     "rgba(108,117,125,1)" // null
   ]
-
+  
   // Draw pie chart
   tui.chart.registerTheme('pie', { series: { colors: sentimentColors }})
   tui.chart.pieChart(document.getElementById('sentiment-pie-chart-container'), {
@@ -161,7 +161,7 @@
       theme: 'pie'
     }
   )
-
+  
   // Draw column chart
   tui.chart.registerTheme('combo', { series: { column: { colors: sentimentColors }}})
   tui.chart.comboChart(document.getElementById('sentiment-column-chart-container'), {
@@ -182,7 +182,7 @@
       theme: 'combo'
     }
   )
-
+  
   // Draw graph
   var clusters = <%= sanitize @clusters.to_json %> || []
   var Graph = ForceGraph3D()
@@ -214,7 +214,7 @@
   document.getElementById('color-by-cluster-btn').addEventListener('click', () => Graph.nodeColor('clusterColor'))
   document.getElementById('size-by-like-btn').addEventListener('click', () => Graph.nodeVal('valLike'))
   document.getElementById('size-by-length-btn').addEventListener('click', () => Graph.nodeVal('valLength'))
-
+  
   // Add clusters colors to nodes
   function randomColor() {
     let r = (Math.random() * 255) | 0
@@ -231,7 +231,7 @@
       })
     })
   })
-
+  
   // ionRangeSlider for display nodes in specific floors
   function showNodesInRange(min, max) {
     let { nodes, links } = data
