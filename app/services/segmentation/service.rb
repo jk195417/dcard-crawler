@@ -17,9 +17,8 @@ class Segmentation::Service
 
   # There is 3 method for segmentation : 'snownlp', 'jieba', 'pkuseg'
   def perform(text, method = 'jieba')
-    params = { text: text }
+    params = { text: text, lib: method }
     response = HTTP.post("#{@host}/segmentations", json: params)
-    segmentations = JSON.parse(response.to_s)
-    segmentations[method]
+    JSON.parse(response.to_s)['result']
   end
 end
