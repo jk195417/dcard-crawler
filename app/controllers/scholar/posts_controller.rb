@@ -48,16 +48,24 @@ class Scholar::PostsController < Scholar::BaseController
   end
 
   def visualization
-    if params[:k]
-      @kmeans = OpinionsClusterJob.perform_now @post, params[:k]
-      @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
-    else
-      k = BestOpinionsClusterJob.perform_now(@post).k
-      redirect_to visualization_scholar_post_path(@post, k: k)
+    begin
+      if params[:k]
+        @kmeans = OpinionsClusterJob.perform_now @post, params[:k]
+        @clusters = @kmeans&.clusters&.map { |cluster| cluster.points.map(&:label) }
+      else
+        k = BestOpinionsClusterJob.perform_now(@post).k
+        redirect_to visualization_scholar_post_path(@post, k: k)
+      end
+    rescue StandardError => e
+      flash[:alert] = e
+      @kmeans = nil
     end
-  rescue StandardError => e
-    flash[:alert] = e
-    @kmeans = nil
+
+    text = [content_filter(@post.content)]
+    @comments.each do |comment|
+      text << content_filter(comment.content) if comment.content.present?
+    end
+    @segmentation = Segmentation::Service.new.perform(text, 'jieba')
   end
 
   def segment
@@ -103,5 +111,11 @@ class Scholar::PostsController < Scholar::BaseController
 
   def post_params
     params.require(:post).permit(:dcard_id, :forum_name)
+  end
+
+  def content_filter(content)
+    return '' if content.blank?
+    content = content.gsub(URI::DEFAULT_PARSER.make_regexp, '') # remove url
+    content = content.gsub(/[bB]\d+/, '')  # remove mentions
   end
 end

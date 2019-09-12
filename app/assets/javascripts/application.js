@@ -24,5 +24,6 @@
 //= require ion-rangeslider/js/ion.rangeSlider.min.js
 //= require 3d-force-graph/dist/3d-force-graph.min.js
 //= require force-graph/dist/force-graph.min.js
-//
+//= require wordcloud/src/wordcloud2.js
+// 
 //= require_tree .

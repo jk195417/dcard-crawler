@@ -40,4 +40,13 @@ module CommentHelper
       </div>
     </div>".html_safe
   end
+
+  def word_frequency(words)
+    result = {}
+    words.flatten.each do |word|
+      word = word.downcase
+      result[word] = (result[word] || 0) + 1
+    end
+    result.map { |key, value| [key, value] }
+  end
 end
