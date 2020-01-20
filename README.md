@@ -1,6 +1,6 @@
 學術用途，爬取 Dcard 上的文章與留言做數據分析。
 
-論文請見 https://etd.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0805119-133659
+論文請見 https://hdl.handle.net/11296/gazcm2 或 https://etd.lis.nsysu.edu.tw/ETD-db/ETD-search-c/view_etd?URN=etd-0805119-133659
 
 ## Setup
 
